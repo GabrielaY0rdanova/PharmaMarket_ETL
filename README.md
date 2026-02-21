@@ -58,7 +58,7 @@ The schema includes the following tables:
 
 For a visual representation, see the ERD diagram below:
 
-![Pharma ERD](docs\Pharma_ERD.png)
+![Pharma ERD](docs/Pharma_ERD.png)
 
 ---
 
