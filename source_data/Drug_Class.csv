@@ -1,0 +1,454 @@
+﻿drug class id,drug class name,slug,generics count
+21,Anaphylaxis,anaphylaxis-21,1
+68,Intracellular antibiotic,intracellular-antibiotic-68,1
+648,Glycopeptide,glycopeptide-648,1
+64,Fourth generation Cephalosporins,fourth-generation-cephalosporins-64,2
+63,First generation Cephalosporins,first-generation-cephalosporins-63,4
+565,Eye Anti-Infectives & Antiseptics,eye-anti-infectives-antiseptics-565,2
+566,Ear Anti-Infectives & Antiseptics,ear-anti-infectives-antiseptics-566,1
+62,Combined anti- Tubercular Preparations,combined-anti-tubercular-preparations-62,3
+61,Broad spectrum penicillins,broad-spectrum-penicillins-61,3
+60,Benzylpenicillin & Phenoxymethyl penicillin,benzylpenicillin-phenoxymethyl-penicillin-60,3
+59,Anti-Tubercular Chemotherapeutics,anti-tubercular-chemotherapeutics-59,3
+58,Anti-Tubercular Antibiotics,anti-tubercular-antibiotics-58,2
+57,Anti-Leprotic drugs,anti-leprotic-drugs-57,1
+56,Aminoglycosides,aminoglycosides-56,4
+55,4-Quinolone preparations,4-quinolone-preparations-55,16
+49,Non depolarizing muscle relaxants,non-depolarizing-muscle-relaxants-49,5
+639,Tyrosine Kinase Inhibitor,tyrosine-kinase-inhibitor-639,7
+449,Silymarin,silymarin-449,0
+456,Salmon Calcitonin,salmon-calcitonin-456,0
+455,Purified Soybean Oil,purified-soybean-oil-455,0
+620,Oxidising agent with antibacterial and antiviral properties,oxidising-agent-with-antibacterial-and-antiviral-properties-620,1
+451,Nitrous Oxide 98 % Gas,nitrous-oxide-98-gas-451,0
+453,Nicotine,nicotine-453,0
+615,Haemostatics,haemostatics-615,1
+611,Haematopoietic Agents,haematopoietic-agents-611,4
+634,Farnesoid X Receptor Agonists,farnesoid-x-receptor-agonists-634,1
+452,Black Seed Oil,black-seed-oil-452,0
+448,loversol,loversol-448,0
+443,lopanoic Acid,lopanoic-acid-443,0
+447,lopamidol,lopamidol-447,0
+446,lohexol,lohexol-446,0
+445,lodixanol,lodixanol-445,0
+441,Gadoversetamide,gadoversetamide-441,0
+442,Gadodiamide,gadodiamide-442,0
+444,Barium Sulphate,barium-sulphate-444,0
+638,Pyrrolopyrimidines,pyrrolopyrimidines-638,1
+440,Other preparations,other-preparations-440,6
+640,Immunomodulator,immunomodulator-640,1
+645,Herbal and Nutraceuticals,herbal-and-nutraceuticals-645,153
+439,Contrast medium for diagnostic procedures,contrast-medium-for-diagnostic-procedures-439,6
+636,Carboxylic acids and derivatives,carboxylic-acids-and-derivatives-636,2
+607,Thyroid drugs & hormone,thyroid-drugs-hormone-607,4
+606,Anti-thyroid drugs,anti-thyroid-drugs-606,2
+617,Trophic Hormones & Related Synthetic Drugs,trophic-hormones-related-synthetic-drugs-617,3
+605,Growth hormone antagonist,growth-hormone-antagonist-605,2
+604,Drugs affecting (inhibiting) gonadotrophin,drugs-affecting-inhibiting-gonadotrophin-604,4
+603,Hormone preparations for other uses,hormone-preparations-for-other-uses-603,2
+601,Drugs for Milk suppression,drugs-for-milk-suppression-601,0
+602,Drugs for menopausal symptoms: Hormone replacement therapy,drugs-for-menopausal-symptoms-hormone-replacement-therapy-602,8
+600,Drugs for Infertility,drugs-for-infertility-600,9
+599,Drugs for Growth failure,drugs-for-growth-failure-599,1
+598,Calcium Regulator,calcium-regulator-598,2
+597,Oral Contraceptive preparations,oral-contraceptive-preparations-597,19
+596,Male Sex hormones (Androgens),male-sex-hormones-androgens-596,2
+595,Hormonal Implants,hormonal-implants-595,0
+594,Gonadotropin-releasing hormone (GnRH) antagonist,gonadotropin-releasing-hormone-gnrh-antagonist-594,2
+593,Female Sex hormones,female-sex-hormones-593,19
+608,Emergency Contraceptive Pill,emergency-contraceptive-pill-608,2
+592,Anabolic steroid (Androgens),anabolic-steroid-androgens-592,2
+591,Aldose reductase inhibitor,aldose-reductase-inhibitor-591,1
+590,Adjunct anti-epileptic drugs,adjunct-anti-epileptic-drugs-590,13
+589,Glucocorticoids,glucocorticoids-589,10
+588,Short Acting Insulin,short-acting-insulin-588,0
+587,Rapid Acting Insulin,rapid-acting-insulin-587,6
+586,Medium Acting Insulin,medium-acting-insulin-586,1
+585,Long Acting Insulin,long-acting-insulin-585,4
+584,GLP-1 receptor agonists,glp-1-receptor-agonists-584,4
+583,Combination Insulin,combination-insulin-583,3
+582,Thiazolidinedione Group,thiazolidinedione-group-582,1
+581,Sulfonylureas,sulfonylureas-581,4
+580,Sodium-glucose Cotransporter-2 (SGLT2) Inhibitors,sodium-glucose-cotransporter-2-sglt2-inhibitors-580,4
+579,Meglitinide Analogues,meglitinide-analogues-579,2
+578,Dipeptidyl Peptidase-4 (DPP-4) inhibitor,dipeptidyl-peptidase-4-dpp-4-inhibitor-578,6
+577,Combination Oral hypoglycemic preparations,combination-oral-hypoglycemic-preparations-577,10
+576,Biguanides,biguanides-576,1
+612,Alpha-Glucosidase inhibitor,alpha-glucosidase-inhibitor-612,3
+564,Preparations for Oral Ulceration & Inflammation,preparations-for-oral-ulceration-inflammation-564,1
+153,Non-steroidal Anti-inflammatory Drugs (NSAIDs),non-steroidal-anti-inflammatory-drugs-nsaids-153,31
+152,Non-Opioid Analgesics,non-opioid-analgesics-152,3
+491,Respiratory stimulants: analeptics,respiratory-stimulants-analeptics-491,3
+490,Pulmonary surfactants,pulmonary-surfactants-490,1
+660,Non-prostanoid IP prostacyclin receptor agonist,non-prostanoid-ip-prostacyclin-receptor-agonist-660,1
+489,Cough suppressant,cough-suppressant-489,4
+488,Cough expectorants & mucolytics,cough-expectorants-mucolytics-488,6
+487,Combined cough suppressants,combined-cough-suppressants-487,5
+486,Combined cough expectorants,combined-cough-expectorants-486,6
+485,Theophylline & related drugs,theophylline-related-drugs-485,2
+484,Short-acting selective & Î²2-adrenoceptor stimulants,short-acting-selective-Î²2-adrenoceptor-stimulants-484,7
+483,Respiratory corticosteroids,respiratory-corticosteroids-483,13
+481,Methyl xanthine derivatives,methyl-xanthine-derivatives-481,2
+480,Long-acting selective Î²-adrenoceptor stimulants,long-acting-selective-Î²-adrenoceptor-stimulants-480,4
+479,Leukotriene receptor antagonists,leukotriene-receptor-antagonists-479,2
+478,Cromoglycate & related drugs,cromoglycate-related-drugs-478,1
+477,Combined bronchodilators,combined-bronchodilators-477,6
+637,Bronchodilator,bronchodilator-637,6
+476,Antihistamines anti-allergies & hypo-sensitisation,antihistamines-anti-allergies-hypo-sensitisation-476,2
+475,Anticholinergic bronchodilators,anticholinergic-bronchodilators-475,3
+471,Topical anti-inflammatory preparations,topical-anti-inflammatory-preparations-471,9
+470,Enzymes,enzymes-470,1
+659,Painkiller Muscle Relaxant,painkiller-muscle-relaxant-659,1
+469,Locally acting Skeletal Muscle Relaxants,locally-acting-skeletal-muscle-relaxants-469,3
+468,Drugs used in Myasthenia Gravis,drugs-used-in-myasthenia-gravis-468,2
+467,Drugs used in Cerebral Palsy,drugs-used-in-cerebral-palsy-467,1
+466,Centrally acting Skeletal Muscle Relaxants,centrally-acting-skeletal-muscle-relaxants-466,8
+465,Non-steroidal Anti-inflammatory Drugs (NSAIDs),non-steroidal-anti-inflammatory-drugs-nsaids-465,31
+462,Drugs used in Gout,drugs-used-in-gout-462,5
+461,Drugs used for Rheumatoid Arthritis,drugs-used-for-rheumatoid-arthritis-461,32
+460,Disease-modifying antirheumatic drugs (DMARDs),disease-modifying-antirheumatic-drugs-dmards-460,3
+437,Urinary Alkalinizing Agent,urinary-alkalinizing-agent-437,2
+436,Systemic Urinary Anti- infective,systemic-urinary-anti-infective-436,3
+435,Other Systemic Anti-infective Effective in Urinary tract infections,other-systemic-anti-infective-effective-in-urinary-tract-infections-435,0
+434,Irrigation Solution used in Urological Surgery,irrigation-solution-used-in-urological-surgery-434,1
+656,Synthetic analogue of ADH,synthetic-analogue-of-adh-656,1
+547,Peritoneal dialysis solution,peritoneal-dialysis-solution-547,1
+546,Other genito-urinary preparations,other-genito-urinary-preparations-546,4
+623,Multiple gynecological preparation,multiple-gynecological-preparation-623,0
+431,Haemodialysis solutions,haemodialysis-solutions-431,4
+622,Drugs used in chronic kidney dialysis,drugs-used-in-chronic-kidney-dialysis-622,2
+430,Drugs for reduction of serum phosphorus in patients with ESRD,drugs-for-reduction-of-serum-phosphorus-in-patients-with-esrd-430,2
+652,Selective vasopressin V2-receptor antagonist,selective-vasopressin-v2-receptor-antagonist-652,1
+429,Drugs used in Vaginal and Vulval condition,drugs-used-in-vaginal-and-vulval-condition-429,12
+428,Drugs used in Ano-rectal region,drugs-used-in-ano-rectal-region-428,5
+427,Drugs for Erectile Dysfunction,drugs-for-erectile-dysfunction-427,5
+426,Drugs acting on the Uterus,drugs-acting-on-the-uterus-426,12
+425,BPH/ Urinary retention/ Urinary incontinence,bph-urinary-retention-urinary-incontinence-425,12
+424,Prevention of repeated kidney stone formation,prevention-of-repeated-kidney-stone-formation-424,2
+418,Phlebotonic & Vascular protecting preparation,phlebotonic-vascular-protecting-preparation-418,2
+417,Compound steroidal preparations,compound-steroidal-preparations-417,2
+545,Proton Pump Inhibitor,proton-pump-inhibitor-545,6
+544,H2 receptor antagonist,h2-receptor-antagonist-544,3
+543,Ulcer protective,ulcer-protective-543,0
+542,Proton Pump Inhibitor,proton-pump-inhibitor-542,6
+541,Prostaglandin analogues,prostaglandin-analogues-541,3
+540,Other drugs used for peptic ulcer disease,other-drugs-used-for-peptic-ulcer-disease-540,0
+539,Motility stimulants/Dopamine antagonist,motility-stimulantsdopamine-antagonist-539,2
+538,H2 receptor antagonist,h2-receptor-antagonist-538,3
+537,Drugs for Aphthous ulcer,drugs-for-aphthous-ulcer-537,0
+536,Chelating complex,chelating-complex-536,1
+651,Candida infections,candida-infections-651,1
+534,Anticholinergics (antimuscarinics)/ Anti-spasmodics,anticholinergics-antimuscarinics-anti-spasmodics-534,12
+535,Anticholinergics,anticholinergics-535,6
+533,Anti-dyspeptic/Carminatives,anti-dyspepticcarminatives-533,3
+532,Anti-cholinergic & anti-psychotic combination drugs,anti-cholinergic-anti-psychotic-combination-drugs-532,0
+531,Anti H. pylori drugs,anti-h-pylori-drugs-531,3
+530,Antacids,antacids-530,6
+529,Proton Pump Inhibitor,proton-pump-inhibitor-529,6
+528,H2 receptor antagonist,h2-receptor-antagonist-528,3
+527,Antacids,antacids-527,6
+526,Proton Pump Inhibitor,proton-pump-inhibitor-526,6
+525,Antacids,antacids-525,8
+524,Prokinetic drugs,prokinetic-drugs-524,3
+523,Anti-emetic drugs,anti-emetic-drugs-523,16
+411,Proton Pump Inhibitor,proton-pump-inhibitor-411,6
+410,Motility Stimulants,motility-stimulants-410,1
+409,H2 receptor antagonist,h2-receptor-antagonist-409,3
+408,Anti-dyspeptic/Carminatives,anti-dyspepticcarminatives-408,2
+407,Antacids,antacids-407,6
+406,Water purifying agent,water-purifying-agent-406,2
+405,Anti-motility drugs,anti-motility-drugs-405,1
+404,Anti-diarrhoeal Enzyme,anti-diarrhoeal-enzyme-404,0
+403,Anti-diarrhoeal Antiprotozoal,anti-diarrhoeal-antiprotozoal-403,4
+402,Anti-diarrhoeal Antimicrobial drugs,anti-diarrhoeal-antimicrobial-drugs-402,4
+401,Anti-diarrhoeal,anti-diarrhoeal-401,3
+400,Stool softener,stool-softener-400,1
+399,Stimulant purgatives,stimulant-purgatives-399,1
+398,Other laxative preparations,other-laxative-preparations-398,2
+397,Osmotic purgatives,osmotic-purgatives-397,9
+396,Enema & bowel cleansing solution,enema-bowel-cleansing-solution-396,3
+395,Combined preparation for constipation,combined-preparation-for-constipation-395,0
+394,Bulk-forming laxatives,bulk-forming-laxatives-394,5
+393,Antacid with laxative action,antacid-with-laxative-action-393,3
+392,Abdominal gas adsorbent preparations,abdominal-gas-adsorbent-preparations-392,0
+416,Ulcerative Colitis,ulcerative-colitis-416,2
+415,Drugs for Irritable Bowel Syndrome,drugs-for-irritable-bowel-syndrome-415,2
+655,Aminosalicylates,aminosalicylates-655,1
+391,Drugs affecting exocrine secretions,drugs-affecting-exocrine-secretions-391,2
+390,Digestive Enzyme,digestive-enzyme-390,3
+389,Cholagogues; Cholelitholytics & Hepatic Protectors,cholagogues-cholelitholytics-hepatic-protectors-389,2
+388,Bile acid sequestrants,bile-acid-sequestrants-388,0
+387,Anti-gallstones drugs: Bile Acids,anti-gallstones-drugs-bile-acids-387,1
+375,Preparations for Ophthalmic diagnosis,preparations-for-ophthalmic-diagnosis-375,3
+372,Ophthalmic Steroid- anti allergic combined preparations,ophthalmic-steroid-anti-allergic-combined-preparations-372,0
+371,Ophthalmic Steroid preparations,ophthalmic-steroid-preparations-371,8
+374,Other ophthalmic preparations,other-ophthalmic-preparations-374,8
+373,Ophthalmic steroid - antibiotic combined preparations,ophthalmic-steroid-antibiotic-combined-preparations-373,12
+370,Ophthalmic Non-Steroid drugs,ophthalmic-non-steroid-drugs-370,10
+369,Ophthalmic Non-Steroid Combined preparations,ophthalmic-non-steroid-combined-preparations-369,1
+562,Ophthalmic antibacterial drugs,ophthalmic-antibacterial-drugs-562,16
+368,Ophthalmic Anti-viral Products,ophthalmic-anti-viral-products-368,4
+367,Ophthalmic Anti-fungal Products,ophthalmic-anti-fungal-products-367,2
+365,Ophthalmic Anti-allergic preparations,ophthalmic-anti-allergic-preparations-365,3
+366,Ophthalmic and Topical antibacterial products,ophthalmic-and-topical-antibacterial-products-366,1
+364,Ocular perioperative drugs,ocular-perioperative-drugs-364,2
+363,Mydriatic and Cycloplegic agents,mydriatic-and-cycloplegic-agents-363,4
+362,Drugs for miotics and glaucoma,drugs-for-miotics-and-glaucoma-362,17
+361,Drugs for lens opacification,drugs-for-lens-opacification-361,1
+359,Drugs for Dry eyes,drugs-for-dry-eyes-359,12
+360,Drugs for corneal oedema,drugs-for-corneal-oedema-360,0
+358,Drugs for Age-Related Macular Degeneration (AMD),drugs-for-age-related-macular-degeneration-amd-358,2
+357,Antioxidant vitamins & minerals for eye,antioxidant-vitamins-minerals-for-eye-357,1
+316,Nasal Steroid Preparations,nasal-steroid-preparations-316,6
+317,Nasal non-steroid Preparation,nasal-non-steroid-preparation-317,0
+614,Nasal Decongestants & Other Nasal Preparations,nasal-decongestants-other-nasal-preparations-614,5
+314,Nasal Anti-cholinergic (Anti- muscarinic) Preparations,nasal-anti-cholinergic-anti-muscarinic-preparations-314,0
+315,Nasal Anti-histamine preparations,nasal-anti-histamine-preparations-315,4
+313,Mast Cell Stabiliser,mast-cell-stabiliser-313,3
+312,Decongestant,decongestant-312,1
+311,Oral preparations,oral-preparations-311,5
+613,Irrigation during various surgical procedures,irrigation-during-various-surgical-procedures-613,1
+624,Anticavity Mouthwash,anticavity-mouthwash-624,1
+654,Cerumenolytic,cerumenolytic-654,1
+310,Aural steroid & antibiotic combined preparations,aural-steroid-antibiotic-combined-preparations-310,4
+309,Aural Anti-fungal preparations,aural-anti-fungal-preparations-309,3
+308,Aural Anti-bacterial preparations,aural-anti-bacterial-preparations-308,5
+650,Anti-fungal or anti-bacterial ear drops,anti-fungal-or-anti-bacterial-ear-drops-650,2
+304,Plasma expanders,plasma-expanders-304,4
+303,Oral electrolytes preparations,oral-electrolytes-preparations-303,6
+302,Intravenous fluid preparations,intravenous-fluid-preparations-302,8
+621,Electrolytes preparations,electrolytes-preparations-621,3
+301,Vitamin-K Preparations,vitamin-k-preparations-301,2
+300,Vitamin-E Preparations,vitamin-e-preparations-300,1
+299,Vitamin-D preparations,vitamin-d-preparations-299,3
+298,Vitamin-C Preparations,vitamin-c-preparations-298,1
+297,Vitamin-B preparations,vitamin-b-preparations-297,7
+296,Vitamin-A preparations,vitamin-a-preparations-296,1
+560,Supplements & adjuvant therapy,supplements-adjuvant-therapy-560,4
+295,Parenteral nutritional preparations,parenteral-nutritional-preparations-295,9
+646,Oral nutritional preparations,oral-nutritional-preparations-646,7
+520,Multi-vitamin & Multi-mineral combined preparations,multi-vitamin-multi-mineral-combined-preparations-520,12
+290,Specific mineral preparations,specific-mineral-preparations-290,13
+289,Specific mineral & vitamin combined preparations,specific-mineral-vitamin-combined-preparations-289,15
+647,Hyperkalaemia Products,hyperkalaemia-products-647,1
+288,Specific combined vitamin preparations,specific-combined-vitamin-preparations-288,14
+286,Anti-oxidant Multivitamin preparations,anti-oxidant-multivitamin-preparations-286,2
+285,Anti-oxidant Multivitamin Multimineral preparations,anti-oxidant-multivitamin-multimineral-preparations-285,2
+519,Drugs for Osteoarthritis,drugs-for-osteoarthritis-519,27
+518,Corticosteroid,corticosteroid-518,10
+276,Stimulation of Cartilage formation,stimulation-of-cartilage-formation-276,3
+274,Vitamin in bone formation,vitamin-in-bone-formation-274,3
+272,Minerals in bone formation,minerals-in-bone-formation-272,6
+273,Inhibiting bone resorption,inhibiting-bone-resorption-273,2
+271,Hormone in bone formation by stimulation,hormone-in-bone-formation-by-stimulation-271,2
+270,Hormone in bone formation by Inhibiting bone resorption,hormone-in-bone-formation-by-inhibiting-bone-resorption-270,1
+269,Combined preparations: Inhibiting bone resorption,combined-preparations-inhibiting-bone-resorption-269,1
+268,Bisphosphonate preparations,bisphosphonate-preparations-268,7
+263,Drugs for Haemolytic Hypoplastic & Renal Anemia,drugs-for-haemolytic-hypoplastic-renal-anemia-263,6
+264,Drugs for Megaloblastic Anemia,drugs-for-megaloblastic-anemia-264,3
+262,Parenteral Iron Preparations,parenteral-iron-preparations-262,4
+261,Oral Iron preparations,oral-iron-preparations-261,6
+260,Iron; Vitamin & Mineral Combined preparation,iron-vitamin-mineral-combined-preparation-260,8
+259,Iron & Vitamin Combined preparations,iron-vitamin-combined-preparations-259,8
+255,Triamcinolone & Combined preparations,triamcinolone-combined-preparations-255,4
+254,Other Topical corticosteroids,other-topical-corticosteroids-254,14
+253,Hydrocortisone & Combined preparations,hydrocortisone-combined-preparations-253,6
+252,Fluticasone & combined preparations topical,fluticasone-combined-preparations-topical-252,1
+251,Fluocinolone & Combined Preparations,fluocinolone-combined-preparations-251,6
+250,Clobetasol / Clobetasone & Combined Preparations,clobetasol-clobetasone-combined-preparations-250,4
+249,Betamethasone & Combined preparations,betamethasone-combined-preparations-249,4
+248,Beclomethasone & Combined Preparations,beclomethasone-combined-preparations-248,0
+247,Topical Local Anesthetics,topical-local-anesthetics-247,3
+246,Topical Antihistamines,topical-antihistamines-246,1
+245,Local Antipruritic,local-antipruritic-245,9
+244,Topical Antiviral preparations,topical-antiviral-preparations-244,1
+243,Topical Antifungal preparations,topical-antifungal-preparations-243,19
+242,Topical Antibiotic preparations,topical-antibiotic-preparations-242,10
+241,Parasiticidal preparations,parasiticidal-preparations-241,5
+240,Other Antifungal preparations,other-antifungal-preparations-240,6
+239,Drugs used in diaper rash,drugs-used-in-diaper-rash-239,2
+238,Anti-infective & Anesthetic combined preparations,anti-infective-anesthetic-combined-preparations-238,1
+237,Other scalp preparations,other-scalp-preparations-237,3
+236,Medicated Shampoos,medicated-shampoos-236,0
+235,Sunblock Preparation,sunblock-preparation-235,7
+233,Combined preparations,combined-preparations-233,1
+234,Topical salicylic preparation,topical-salicylic-preparation-234,1
+232,Anti neoplastic preparations,anti-neoplastic-preparations-232,5
+230,Methoxsalen preparation,methoxsalen-preparation-230,1
+229,Topical urea preparations,topical-urea-preparations-229,2
+228,Topical retinoid and related preparations,topical-retinoid-and-related-preparations-228,4
+231,Hydroquinone Preparations,hydroquinone-preparations-231,2
+227,Topical antibiotics for Acne,topical-antibiotics-for-acne-227,2
+226,Topical antibiotic & retinoid preparations,topical-antibiotic-retinoid-preparations-226,1
+225,Oral retinoids for Acne,oral-retinoids-for-acne-225,1
+224,Oral Hormonal preparations for Acne,oral-hormonal-preparations-for-acne-224,1
+223,Benzoyl peroxide; Azelaic acid & other preparations,benzoyl-peroxide-azelaic-acid-other-preparations-223,2
+561,Acne treatment preparations,acne-treatment-preparations-561,4
+220,Iodine compounds (Anti-septic Preparations),iodine-compounds-anti-septic-preparations-220,1
+219,Crystal violet/ Gentian violet preparations,crystal-violet-gentian-violet-preparations-219,1
+222,Dressing products for wounds/burns/ulcers,dressing-products-for-woundsburnsulcers-222,1
+218,Chlorhexidine & Chloroxylenol preparations,chlorhexidine-chloroxylenol-preparations-218,6
+217,Bleaching and Disinfectants,bleaching-and-disinfectants-217,6
+216,Zinc & Combined preparations,zinc-combined-preparations-216,0
+215,Topical Vitamin D & related preparations,topical-vitamin-d-related-preparations-215,1
+214,Topical retinoid and related preparations,topical-retinoid-and-related-preparations-214,7
+213,Oral Retinoid preparations,oral-retinoid-preparations-213,2
+212,Emollients & combined preparations,emollients-combined-preparations-212,8
+211,Drugs affecting the immune response,drugs-affecting-the-immune-response-211,3
+210,Dithranol & combined preparations,dithranol-combined-preparations-210,1
+209,Coal-tar preparations,coal-tar-preparations-209,3
+208,Topical Analgesics,topical-analgesics-208,9
+558,Miscellaneous topical agents,miscellaneous-topical-agents-558,19
+628,Hair Growth Inhibitor,hair-growth-inhibitor-628,1
+517,Statins,statins-517,5
+516,Cerebral vasodilator & Neurosensory oxygenator drugs,cerebral-vasodilator-neurosensory-oxygenator-drugs-516,2
+515,Calcium-channel blockers,calcium-channel-blockers-515,11
+630,Antiarrhythmic Therapy,antiarrhythmic-therapy-630,0
+514,Anti-platelet drugs,anti-platelet-drugs-514,14
+513,Anti-coagulants,anti-coagulants-513,3
+512,Angiotensin-ll receptor blocker,angiotensin-ll-receptor-blocker-512,7
+510,Calcium-channel blockers,calcium-channel-blockers-510,11
+509,Angiotensin-ll receptor blocker,angiotensin-ll-receptor-blocker-509,7
+190,Tricyclic Anti-depressant,tricyclic-anti-depressant-190,5
+189,Miscellaneous prophylactic migraine preparations,miscellaneous-prophylactic-migraine-preparations-189,1
+188,Beta-blockers,beta-blockers-188,6
+187,Anti-histamine Preparations,anti-histamine-preparations-187,2
+162,Non-Benzodiazepine hypnotics,non-benzodiazepine-hypnotics-162,0
+161,Miscellaneous sedatives & hypnotics,miscellaneous-sedatives-hypnotics-161,9
+160,Benzodiazepine sedatives,benzodiazepine-sedatives-160,7
+159,Benzodiazepine hypnotics,benzodiazepine-hypnotics-159,8
+158,Barbiturates,barbiturates-158,1
+186,Piperidinyl-benzisoxazole derivative,piperidinyl-benzisoxazole-derivative-186,1
+185,Phenothiazine related drugs,phenothiazine-related-drugs-185,5
+184,Phenothiazine drugs,phenothiazine-drugs-184,4
+183,Butyrophenone drugs,butyrophenone-drugs-183,1
+182,Atypical neuroleptic drugs,atypical-neuroleptic-drugs-182,12
+181,Anti-manic drugs,anti-manic-drugs-181,1
+631,Neurodegenerative Disease Drugs / Neuromuscular Disorder Drugs,neurodegenerative-disease-drugs-neuromuscular-disorder-drugs-631,1
+180,Drugs used in substance dependence,drugs-used-in-substance-dependence-180,1
+179,CNS stimulant drugs,cns-stimulant-drugs-179,4
+178,Appetite suppressant drugs/Anti-obesity drugs,appetite-suppressant-drugsanti-obesity-drugs-178,1
+177,Antidote preparations,antidote-preparations-177,12
+176,Drugs used in tremor; tics & related disorder,drugs-used-in-tremor-tics-related-disorder-176,2
+175,Drugs for Dementia,drugs-for-dementia-175,2
+174,Antiparkinson drugs,antiparkinson-drugs-174,14
+173,Anti-Alzheimer drugs,anti-alzheimer-drugs-173,1
+172,Drugs used in meniere's diseases,drugs-used-in-menieres-diseases-172,2
+171,Anti-emetic drugs,anti-emetic-drugs-171,15
+170,Anti vertigo drugs,anti-vertigo-drugs-170,3
+169,Primary anti-epileptic drugs,primary-anti-epileptic-drugs-169,6
+168,Adjunct anti-epileptic drugs,adjunct-anti-epileptic-drugs-168,11
+167,Tricyclic & related anti-depressant drugs,tricyclic-related-anti-depressant-drugs-167,5
+165,SSRIs & related anti-depressant drugs,ssris-related-anti-depressant-drugs-165,6
+166,Serotonin-norepinephrine reuptake inhibitor (SNRI),serotonin-norepinephrine-reuptake-inhibitor-snri-166,6
+164,Combined anxiolytics & anti-depressant drugs,combined-anxiolytics-anti-depressant-drugs-164,3
+163,Atypical anti-depressant drugs,atypical-anti-depressant-drugs-163,5
+157,Other drugs for migraine,other-drugs-for-migraine-157,3
+156,Ergot Alkaloids,ergot-alkaloids-156,1
+155,5-HT Agonists,5-ht-agonists-155,5
+139,Peripheral Vasodilator drugs: Intermittent Claudication,peripheral-vasodilator-drugs-intermittent-claudication-139,2
+138,Drugs for muscular energy metabolism,drugs-for-muscular-energy-metabolism-138,1
+137,Cerebral vasodilator & Neurosensory oxygenator drugs,cerebral-vasodilator-neurosensory-oxygenator-drugs-137,2
+136,Statins,statins-136,5
+135,Other lipid regulating drugs,other-lipid-regulating-drugs-135,2
+134,Nicotinic acid group,nicotinic-acid-group-134,1
+133,Fibrates,fibrates-133,1
+132,Ezetimibe,ezetimibe-132,1
+616,Dyslipidaemic Agents,dyslipidaemic-agents-616,1
+658,Adenosine triphosphate-citrate lyase (ACL) inhibitor,adenosine-triphosphate-citrate-lyase-acl-inhibitor-658,0
+508,Vasodilator antihypertensive drugs,vasodilator-antihypertensive-drugs-508,1
+507,Thiazide diuretics & related drugs,thiazide-diuretics-related-drugs-507,4
+505,Potassium-sparing diuretics & Aldosterone antagonists,potassium-sparing-diuretics-aldosterone-antagonists-505,3
+504,Osmotic diuretics,osmotic-diuretics-504,1
+506,Potassium-sparing diuretics,potassium-sparing-diuretics-506,3
+503,Loop diuretics,loop-diuretics-503,4
+502,Endothelin receptor antagonist,endothelin-receptor-antagonist-502,2
+501,Direct Renin Inhibitors,direct-renin-inhibitors-501,1
+500,Combined antihypertensive preparations,combined-antihypertensive-preparations-500,20
+499,Centrally acting antihypertensive drugs (central sympatholytic),centrally-acting-antihypertensive-drugs-central-sympatholytic-499,2
+498,Carbonic anhydrase inhibitor,carbonic-anhydrase-inhibitor-498,1
+497,Calcium-channel blockers,calcium-channel-blockers-497,11
+496,Beta-adrenoceptor blocking drugs,beta-adrenoceptor-blocking-drugs-496,7
+559,Anti-hypertensive,anti-hypertensive-559,5
+494,Angiotensin-ll receptor blocker,angiotensin-ll-receptor-blocker-494,7
+495,Angiotensin-converting enzyme (ACE) inhibitors,angiotensin-converting-enzyme-ace-inhibitors-495,5
+493,Alpha and Beta-adrenergic agonist,alpha-and-beta-adrenergic-agonist-493,1
+126,Alpha and Beta-adrenergic agonist,alpha-and-beta-adrenergic-agonist-126,0
+125,Alpha adrenoceptor blocking drugs,alpha-adrenoceptor-blocking-drugs-125,5
+492,Alpha adrenoceptor blocking drugs,alpha-adrenoceptor-blocking-drugs-492,5
+124,Vasoconstrictor/Venotonic,vasoconstrictorvenotonic-124,2
+123,Thiazide diuretics & related drugs,thiazide-diuretics-related-drugs-123,4
+661,Stimulator of soluble guanylate cyclase,stimulator-of-soluble-guanylate-cyclase-661,1
+122,Potassium-sparing diuretics,potassium-sparing-diuretics-122,3
+121,Positive Inotropic drugs,positive-inotropic-drugs-121,1
+120,Loop diuretics,loop-diuretics-120,4
+119,Inotropic-sympathomimetics,inotropic-sympathomimetics-119,2
+117,Angiotensin-ll receptor blocker,angiotensin-ll-receptor-blocker-117,7
+118,Angiotensin-converting enzyme (ACE) inhibitors,angiotensin-converting-enzyme-ace-inhibitors-118,5
+112,Potassium channel blockers,potassium-channel-blockers-112,1
+116,Paroxysmal supraventricular tachycardia (PSVT),paroxysmal-supraventricular-tachycardia-psvt-116,1
+115,Membrane stabilizing agent (Sodium channel blockers),membrane-stabilizing-agent-sodium-channel-blockers-115,2
+114,Calcium-channel blockers,calcium-channel-blockers-114,11
+113,Anti adrenergic agent (Beta blockers),anti-adrenergic-agent-beta-blockers-113,3
+111,Potassium-channel activator,potassium-channel-activator-111,1
+110,Other Anti-anginal & Anti-ischaemic drugs,other-anti-anginal-anti-ischaemic-drugs-110,8
+109,Nitrates: Coronary vasodilators,nitrates-coronary-vasodilators-109,5
+108,Calcium-channel blockers,calcium-channel-blockers-108,11
+107,Anti-anginal & lipid lowering drugs,anti-anginal-lipid-lowering-drugs-107,1
+106,Haemostatic drugs,haemostatic-drugs-106,3
+105,Antihaemophilic factor,antihaemophilic-factor-105,1
+104,Anti-platelet drugs,anti-platelet-drugs-104,14
+103,Anti-fibrinolytic drugs,anti-fibrinolytic-drugs-103,4
+102,Parenteral anti-coagulants,parenteral-anti-coagulants-102,4
+101,Oral Anti-coagulants,oral-anti-coagulants-101,3
+100,Hematopoietic drug,hematopoietic-drug-100,1
+99,Fibrinolytics (Thrombolytics),fibrinolytics-thrombolytics-99,7
+633,Vaso Protective,vaso-protective-633,1
+482,Other adrenoceptor stimulants,other-adrenoceptor-stimulants-482,3
+552,Targeted Cancer Therapy,targeted-cancer-therapy-552,18
+551,Supportive Care Therapy,supportive-care-therapy-551,2
+643,Protein kinase inhibitor,protein-kinase-inhibitor-643,2
+550,Immunological Chemotherapy,immunological-chemotherapy-550,4
+549,Hormonal Chemotherapy,hormonal-chemotherapy-549,5
+553,Cytotoxic immunosuppressants,cytotoxic-immunosuppressants-553,3
+548,Cytotoxic Chemotherapy,cytotoxic-chemotherapy-548,41
+88,Respiratory viral infections (Influenza),respiratory-viral-infections-influenza-88,3
+87,Herpes simplex & Varicella-zoster virus infections,herpes-simplex-varicella-zoster-virus-infections-87,4
+86,Hepatic viral infections (Hepatitis C),hepatic-viral-infections-hepatitis-c-86,8
+85,Hepatic viral infections (Hepatitis B),hepatic-viral-infections-hepatitis-b-85,7
+83,Drugs for HIV / Anti-retroviral drugs,drugs-for-hiv-anti-retroviral-drugs-83,10
+609,Anti-viral drugs,anti-viral-drugs-609,4
+81,Leishmaniacides,leishmaniacides-81,2
+82,Other Anti-protozoals,other-anti-protozoals-82,2
+80,Anti-malarial drugs,anti-malarial-drugs-80,10
+79,Amoebicides,amoebicides-79,5
+78,Anthelmintic,anthelmintic-78,5
+653,Echinocandins,echinocandins-653,1
+77,Drugs for subcutaneous and mycoses,drugs-for-subcutaneous-and-mycoses-77,8
+75,Third generation Cephalosporins,third-generation-cephalosporins-75,10
+74,Tetracycline group of drugs,tetracycline-group-of-drugs-74,6
+73,Sulphonamides & Trimethoprim,sulphonamides-trimethoprim-73,1
+72,Second generation Cephalosporins,second-generation-cephalosporins-72,5
+71,Penicillinase-resistant penicillins,penicillinase-resistant-penicillins-71,2
+69,Other beta-lactam Antibiotics,other-beta-lactam-antibiotics-69,6
+618,Other antibiotic,other-antibiotic-618,2
+67,Mecillinams,mecillinams-67,1
+610,Other antibacterial preparation,other-antibacterial-preparation-610,8
+66,Macrolides,macrolides-66,13
+65,Long acting penicillin,long-acting-penicillin-65,1
+48,Depolarizing muscle relaxants,depolarizing-muscle-relaxants-48,1
+47,Central Depolarizing muscle relaxants,central-depolarizing-muscle-relaxants-47,1
+46,Regional anesthesia,regional-anesthesia-46,3
+45,Local & Surface anesthesia,local-surface-anesthesia-45,9
+44,Opioid analgesics,opioid-analgesics-44,8
+43,Non opioid analgesics,non-opioid-analgesics-43,4
+42,General (Intravenous) anesthetics,general-intravenous-anesthetics-42,3
+41,General (Inhalation) anesthetics,general-inhalation-anesthetics-41,3
+35,Benzodiazepine antagonist,benzodiazepine-antagonist-35,2
+34,Anti-cholinesterases,anti-cholinesterases-34,1
+26,Immunosuppressant,immunosuppressant-26,14
+27,Vaccines; Anti-sera & Immunoglobulin,vaccines-anti-sera-immunoglobulin-27,36
+25,Sedating Anti-histamine,sedating-anti-histamine-25,10
+24,Non-sedating antihistamines,non-sedating-antihistamines-24,9
+23,Corticosteroid,corticosteroid-23,10
+22,Anti-histamine & decongestant,anti-histamine-decongestant-22,1
