@@ -135,11 +135,12 @@ FROM 'E:\Data Analysis\My Projects\PharmaMarket_ETL\source_data\'
 - **CTEs** for data cleaning and deduplication  
 - **Primary Keys, Foreign Keys, Unique Constraints** for data integrity  
 
-## 🚀 Future Enhancements
+## 🚀 Upcoming Projects
+This ETL pipeline is the foundation for a series of follow-up projects using the PharmaMarketAnalytics database:
 
-- Advanced analytics queries for drug usage trends and reporting  
-- Power BI dashboard integration for interactive visualizations  
-- Python integration for automated data pipeline execution  
+- 🧹 **Data Cleaning** — Deeper data quality work: handling nulls, standardizing drug names and dosage formats, validating foreign key relationships, and ensuring consistency across the dataset.
+- 🔍 **Exploratory Data Analysis (EDA)** — Uncovering patterns in drug classes, generics, manufacturers, and indications through analytical SQL queries and summary statistics.
+- 📊 **Data Visualization** — An interactive dashboard presenting key insights from the database, including drug distribution, manufacturer market share, and indication trends.
 
 ## 📚 Data Source
 

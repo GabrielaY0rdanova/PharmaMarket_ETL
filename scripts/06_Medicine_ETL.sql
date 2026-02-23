@@ -39,6 +39,7 @@ CREATE TABLE Medicine (
         REFERENCES Manufacturer(Manufacturer_ID)
 );
 
+-- ==============
 -- ==========================
 -- DROP staging table if exists
 -- ==========================
