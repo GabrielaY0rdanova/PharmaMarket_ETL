@@ -81,8 +81,6 @@ WITH (
     FIELDTERMINATOR = ',',
     ROWTERMINATOR = '\n',
     CODEPAGE = '65001',
-    FORMAT = 'CSV',
-    FIELDQUOTE = '"',
     TABLOCK
 );
 
