@@ -5,7 +5,7 @@
 --
 -- Expected results summary:
 --   Section 1   — all RowCounts > 0
---   Section 2   — all DuplicateCounts = 0 (except Medicine: 3 known true duplicates)
+--   Section 2   — all DuplicateCounts = 0 (except Medicine: 59 known true duplicates)
 --   Section 3   — most IssueCounts = 0 (see documented exceptions)
 --   Section 4   — all IssueCounts = 0
 --   Section 5   — all IssueCounts = 0
@@ -91,7 +91,7 @@ FROM (
 -- in multiple strengths and dosage forms, which is expected and legitimate.
 -- This check targets true duplicates: identical Brand_Name + Strength +
 -- Dosage_Form_ID + Manufacturer_ID.
--- Known result: 3 (Feroson, Retigel, Vitaplus) — duplicate rows in raw CSV.
+-- Known result: 59 — duplicate rows in raw CSV caused by CSV parsing.
 -- Candidate for deduplication in the Data Cleaning project.
 SELECT 'Medicine — true duplicates (Brand + Strength + DosageForm + Manufacturer)' AS Check_Name,
        COUNT(*) AS DuplicateCount

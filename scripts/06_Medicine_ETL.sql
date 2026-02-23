@@ -81,11 +81,17 @@ WITH (
     FIELDTERMINATOR = ',',
     ROWTERMINATOR = '\n',
     CODEPAGE = '65001',
+    FORMAT = 'CSV',
+    FIELDQUOTE = '"',
     TABLOCK
 );
 
 -- ==========================
 -- CLEAN DATA AND INSERT INTO MEDICINE
+-- NOTE: Medicine.csv contains 59 true duplicate rows
+-- (same Brand_Name + Strength + Dosage_Form + Manufacturer).
+-- These survive the DISTINCT clause due to CSV parsing artifacts.
+-- Candidate for deduplication in the Data Cleaning project.
 -- ==========================
 WITH Cleaned AS (
     SELECT
