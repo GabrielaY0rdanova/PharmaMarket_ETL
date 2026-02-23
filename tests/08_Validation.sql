@@ -4,11 +4,11 @@
 -- Run this script AFTER all ETL scripts (00 through 07)
 --
 -- Expected results summary:
---   Section 1   — all RowCounts > 0 (Generic_Indication = 0 is expected)
+--   Section 1   — all RowCounts > 0
 --   Section 2   — all DuplicateCounts = 0 (except Medicine: 3 known true duplicates)
---   Section 3   — most IssueCount = 0 (see documented exceptions below)
---   Section 4   — all IssueCount = 0
---   Section 5   — all IssueCount = 0
+--   Section 3   — most IssueCounts = 0 (see documented exceptions)
+--   Section 4   — all IssueCounts = 0
+--   Section 5   — all IssueCounts = 0
 --   Section 6   — review as informational
 --   Sections 7-8 — review manually for sense-checking
 -- =================================================
@@ -19,22 +19,21 @@ GO
 -- =================================================
 -- SECTION 1: ROW COUNTS
 -- Quick confirmation that all tables were populated.
--- NOTE: Generic_Indication has no source CSV — it will correctly show 0.
 -- =================================================
 
-SELECT 'Drug_Class'                                AS TableName, COUNT(*) AS [RowCount] FROM Drug_Class
+SELECT 'Drug_Class'          AS TableName, COUNT(*) AS [RowCount] FROM Drug_Class
 UNION ALL
-SELECT 'Dosage_Form',                                             COUNT(*) FROM Dosage_Form
+SELECT 'Dosage_Form',                       COUNT(*) FROM Dosage_Form
 UNION ALL
-SELECT 'Manufacturer',                                            COUNT(*) FROM Manufacturer
+SELECT 'Manufacturer',                      COUNT(*) FROM Manufacturer
 UNION ALL
-SELECT 'Indication',                                              COUNT(*) FROM Indication
+SELECT 'Indication',                        COUNT(*) FROM Indication
 UNION ALL
-SELECT 'Generic',                                                 COUNT(*) FROM Generic
+SELECT 'Generic',                           COUNT(*) FROM Generic
 UNION ALL
-SELECT 'Medicine',                                                COUNT(*) FROM Medicine
+SELECT 'Medicine',                          COUNT(*) FROM Medicine
 UNION ALL
-SELECT 'Generic_Indication (no CSV — expected 0)',                COUNT(*) FROM Generic_Indication
+SELECT 'Generic_Indication',                COUNT(*) FROM Generic_Indication
 ORDER BY TableName;
 GO
 
@@ -88,10 +87,11 @@ FROM (
     HAVING COUNT(*) > 1
 ) d;
 
--- Medicine: DISTINCT was used during INSERT but Brand_Name alone is not a unique key
--- (same brand can exist in multiple strengths/dosage forms — this is expected).
--- The check below targets true duplicates: same Brand_Name + Strength + Dosage_Form_ID + Manufacturer_ID.
--- Known result: 3 rows (Feroson, Retigel, Vitaplus) — sourced from duplicate rows in raw CSV.
+-- Medicine: Brand_Name alone is not a unique key — the same brand exists
+-- in multiple strengths and dosage forms, which is expected and legitimate.
+-- This check targets true duplicates: identical Brand_Name + Strength +
+-- Dosage_Form_ID + Manufacturer_ID.
+-- Known result: 3 (Feroson, Retigel, Vitaplus) — duplicate rows in raw CSV.
 -- Candidate for deduplication in the Data Cleaning project.
 SELECT 'Medicine — true duplicates (Brand + Strength + DosageForm + Manufacturer)' AS Check_Name,
        COUNT(*) AS DuplicateCount
@@ -202,6 +202,18 @@ SELECT 'Medicine -> Manufacturer broken FK' AS Check_Name,
 FROM Medicine m
 INNER JOIN Manufacturer mf ON m.Manufacturer_ID = mf.Manufacturer_ID
 WHERE mf.Manufacturer_ID IS NULL;
+
+SELECT 'Generic_Indication -> Generic broken FK' AS Check_Name,
+       COUNT(*) AS IssueCount
+FROM Generic_Indication gi
+LEFT JOIN Generic g ON gi.Generic_ID = g.Generic_ID
+WHERE g.Generic_ID IS NULL;
+
+SELECT 'Generic_Indication -> Indication broken FK' AS Check_Name,
+       COUNT(*) AS IssueCount
+FROM Generic_Indication gi
+LEFT JOIN Indication i ON gi.Indication_ID = i.Indication_ID
+WHERE i.Indication_ID IS NULL;
 GO
 
 -- =================================================
@@ -257,12 +269,12 @@ LEFT JOIN Generic g ON dc.Drug_Class_ID = g.Drug_Class_ID
 WHERE g.Generic_ID IS NULL;
 
 SELECT
-    'Has generics'  AS Category, COUNT(DISTINCT dc.Drug_Class_ID) AS Count
+    'Has generics' AS Category, COUNT(DISTINCT dc.Drug_Class_ID) AS Count
 FROM Drug_Class dc
 INNER JOIN Generic g ON dc.Drug_Class_ID = g.Drug_Class_ID
 UNION ALL
 SELECT
-    'No generics'   AS Category, COUNT(DISTINCT dc.Drug_Class_ID) AS Count
+    'No generics'  AS Category, COUNT(DISTINCT dc.Drug_Class_ID) AS Count
 FROM Drug_Class dc
 LEFT JOIN Generic g ON dc.Drug_Class_ID = g.Drug_Class_ID
 WHERE g.Generic_ID IS NULL;
@@ -281,12 +293,13 @@ GO
 -- Visual spot-check — review these rows manually.
 -- =================================================
 
-SELECT TOP 5 * FROM Drug_Class   ORDER BY Drug_Class_ID;
-SELECT TOP 5 * FROM Dosage_Form  ORDER BY Dosage_Form_ID;
-SELECT TOP 5 * FROM Manufacturer ORDER BY Manufacturer_ID;
-SELECT TOP 5 * FROM Indication   ORDER BY Indication_ID;
-SELECT TOP 5 * FROM Generic      ORDER BY Generic_ID;
-SELECT TOP 5 * FROM Medicine     ORDER BY Brand_ID;
+SELECT TOP 5 * FROM Drug_Class        ORDER BY Drug_Class_ID;
+SELECT TOP 5 * FROM Dosage_Form       ORDER BY Dosage_Form_ID;
+SELECT TOP 5 * FROM Manufacturer      ORDER BY Manufacturer_ID;
+SELECT TOP 5 * FROM Indication        ORDER BY Indication_ID;
+SELECT TOP 5 * FROM Generic           ORDER BY Generic_ID;
+SELECT TOP 5 * FROM Medicine          ORDER BY Brand_ID;
+SELECT TOP 5 * FROM Generic_Indication ORDER BY Generic_Indication_ID;
 GO
 
 -- =================================================
@@ -334,6 +347,31 @@ SELECT
 FROM Medicine
 GROUP BY Type
 ORDER BY Count DESC;
+
+-- Generic_Indication pairs loaded
+-- Known result: 1608
+SELECT
+    'Generic_Indication pairs loaded' AS Metric,
+    COUNT(*)                          AS Count
+FROM Generic_Indication;
+
+-- Top 10 generics by number of indications
+SELECT TOP 10
+    g.Generic_Name,
+    COUNT(gi.Indication_ID) AS Indication_Count
+FROM Generic g
+INNER JOIN Generic_Indication gi ON g.Generic_ID = gi.Generic_ID
+GROUP BY g.Generic_Name
+ORDER BY Indication_Count DESC;
+
+-- Top 10 indications by number of generics treating them
+SELECT TOP 10
+    i.Indication_Name,
+    COUNT(gi.Generic_ID) AS Generic_Count
+FROM Indication i
+INNER JOIN Generic_Indication gi ON i.Indication_ID = gi.Indication_ID
+GROUP BY i.Indication_Name
+ORDER BY Generic_Count DESC;
 GO
 
 -- =================================================

@@ -5,6 +5,8 @@
 -- and inserts into the final Dosage_Form table
 -- =================================================
 
+USE PharmaMarketAnalytics;
+GO
 
 -- ==========================
 -- DROP final table if exists
@@ -36,11 +38,6 @@ CREATE TABLE Staging_Dosage_Form (
 );
 
 -- ==========================
--- TRUNCATE staging just in case
--- ==========================
-TRUNCATE TABLE Staging_Dosage_Form;
-
--- ==========================
 -- BULK INSERT INTO STAGING TABLE
 -- ==========================
 -- IMPORTANT:
@@ -59,6 +56,8 @@ WITH (
     FIELDTERMINATOR = ',',
     ROWTERMINATOR = '\n',
     CODEPAGE = '65001',
+    FORMAT = 'CSV',
+    FIELDQUOTE = '"',
     TABLOCK
 );
 
@@ -90,3 +89,8 @@ WHERE rn = 1
 -- CLEANUP
 -- ==========================
 DROP TABLE Staging_Dosage_Form;
+
+-- ==========================
+-- VERIFY
+-- ==========================
+SELECT COUNT(*) AS Dosage_Form_Count FROM Dosage_Form;

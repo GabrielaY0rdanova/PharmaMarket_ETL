@@ -4,6 +4,8 @@
 -- Creates staging table, cleans data, and inserts into final table
 -- =================================================
 
+USE PharmaMarketAnalytics;
+GO
 
 -- ==========================
 -- DROP final table if exists
@@ -34,11 +36,6 @@ CREATE TABLE Staging_Drug_Class (
 );
 
 -- ==========================
--- TRUNCATE staging just in case
--- ==========================
-TRUNCATE TABLE Staging_Drug_Class;
-
--- ==========================
 -- BULK INSERT INTO STAGING TABLE
 -- ==========================
 -- IMPORTANT:
@@ -57,6 +54,8 @@ WITH (
     FIELDTERMINATOR = ',',
     ROWTERMINATOR = '\n',
     CODEPAGE = '65001',
+    FORMAT = 'CSV',
+    FIELDQUOTE = '"',
     TABLOCK
 );
 
@@ -86,3 +85,8 @@ WHERE rn = 1;
 -- CLEANUP
 -- ==========================
 DROP TABLE Staging_Drug_Class;
+
+-- ==========================
+-- VERIFY
+-- ==========================
+SELECT COUNT(*) AS Drug_Class_Count FROM Drug_Class;

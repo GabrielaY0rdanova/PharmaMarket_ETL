@@ -18,25 +18,28 @@ The database schema supports drug information, generics, manufacturers, dosage f
 PharmaMarket_ETL/
 │
 ├── docs/                        # ER diagrams and visuals
-│ └── Pharma_ERD.png
+│   └── Pharma_ERD.png
 │
 ├── source_data/                 # CSV input files
-│ ├── DosageForm.csv
-│ ├── DrugClass.csv
-│ ├── Generic.csv
-│ ├── Indication.csv
-│ ├── Manufacturer.csv
-│ └── Medicine.csv
+│   ├── DosageForm.csv
+│   ├── DrugClass.csv
+│   ├── Generic.csv
+│   ├── Indication.csv
+│   ├── Manufacturer.csv
+│   └── Medicine.csv
 │
 ├── scripts/                     # SQL ETL scripts
-│ ├── 00_CreateDatabase.sql
-│ ├── 01_DrugClass_ETL.sql
-│ ├── 02_DosageForm_ETL.sql
-│ ├── 03_Manufacturer_ETL.sql
-│ ├── 04_Indication_ETL.sql
-│ ├── 05_Generic_ETL.sql
-│ ├── 06_Medicine_ETL.sql
-│ └── 07_Generic_Indication_ETL.sql
+│   ├── 00_CreateDatabase.sql
+│   ├── 01_DrugClass_ETL.sql
+│   ├── 02_DosageForm_ETL.sql
+│   ├── 03_Manufacturer_ETL.sql
+│   ├── 04_Indication_ETL.sql
+│   ├── 05_Generic_ETL.sql
+│   ├── 06_Medicine_ETL.sql
+│   └── 07_Generic_Indication_ETL.sql
+│
+├── tests/                       # Validation and sanity check queries
+│   └── 08_Validation.sql
 │
 └── README.md
 ```
@@ -77,22 +80,26 @@ For a visual representation, see the ERD diagram below:
    6. `06_Medicine_ETL.sql`
    7. `07_Generic_Indication_ETL.sql`
 
-Each script follows this pattern:  
+3. **Validate**  
+   Run `tests/08_Validation.sql` to verify row counts, check for duplicates, confirm referential integrity, and review summary statistics.
 
-- 🗃️ Drop existing staging/final table if exists  
-- 📥 Create staging table to match CSV format  
-- 🔄 Bulk insert from CSV  
-- 🧹 Clean data using T-SQL (trim, replace, deduplicate)  
-- 🏷️ Insert into final table with foreign key mapping  
-- 🗑️ Drop staging table  
+Each ETL script follows this pattern:
+
+- 🗃️ Drop existing staging/final table if exists
+- 📥 Create staging table to match CSV format
+- 🔄 Bulk insert from CSV
+- 🧹 Clean data using T-SQL (trim, replace, deduplicate)
+- 🏷️ Insert into final table with foreign key mapping
+- 🗑️ Drop staging table
+- ✅ Verify row count
 
 ## 💡 Notes
 
-- **Generic_Indication** is a junction table for a many-to-many relationship.
+- **Generic_Indication** is populated from the `indication` column in `Generic.csv`, which maps each generic drug to its primary medical indication. 1,608 Generic–Indication pairs were loaded successfully.
 
 - CSV files in `source_data/` follow PascalCase naming to match the SQL scripts.
 
-- Scripts are fully repeatable and safe to run multiple times due to `IF NOT EXISTS` checks and deduplication logic.
+- Scripts are fully repeatable and safe to run multiple times due to `DROP IF EXISTS` checks and deduplication logic.
 
 ## 📂⚡ File Path Configuration (Important)
 
@@ -116,24 +123,24 @@ FROM 'E:\Data Analysis\My Projects\PharmaMarket_ETL\source_data\'
 ```
 ### ⚠️ Important Notes
 
-- The path must be accessible by the SQL Server instance.  
-- If SQL Server runs locally, the file must exist on your machine.  
-- If SQL Server runs remotely or in Docker, the file must exist on that server or container.  
-- Spaces in folder names are fully supported as long as the path is enclosed in single quotes.  
+- The path must be accessible by the SQL Server instance.
+- If SQL Server runs locally, the file must exist on your machine.
+- If SQL Server runs remotely or in Docker, the file must exist on that server or container.
+- Spaces in folder names are fully supported as long as the path is enclosed in single quotes.
 - Each ETL script contains a clearly marked section indicating where to update the file path.
 
 ### 💡 Why Absolute Paths?
 
 - `BULK INSERT` does **not** read files relative to the SQL script location.
-- It reads files relative to the SQL Server service environment.  
+- It reads files relative to the SQL Server service environment.
 - For clarity and transparency, this project uses **documented absolute paths** instead of dynamic configuration.
 
 ## 🛠️ Technologies Used
 
-- **SQL Server / T-SQL**  
-- **BULK INSERT** for CSV data import  
-- **CTEs** for data cleaning and deduplication  
-- **Primary Keys, Foreign Keys, Unique Constraints** for data integrity  
+- **SQL Server / T-SQL**
+- **BULK INSERT** with `FORMAT = 'CSV'` and `FIELDQUOTE` for robust CSV parsing
+- **CTEs** for data cleaning and deduplication
+- **Primary Keys, Foreign Keys, Unique Constraints** for data integrity
 
 ## 🚀 Upcoming Projects
 This ETL pipeline is the foundation for a series of follow-up projects using the PharmaMarketAnalytics database:

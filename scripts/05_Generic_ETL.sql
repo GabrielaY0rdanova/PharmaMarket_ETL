@@ -5,6 +5,8 @@
 -- and inserts into the final Generic table with proper FK mapping
 -- =================================================
 
+USE PharmaMarketAnalytics;
+GO
 
 -- ==========================
 -- DROP final table if exists
@@ -41,11 +43,6 @@ CREATE TABLE Staging_Generic (
 );
 
 -- ==========================
--- TRUNCATE staging just in case
--- ==========================
-TRUNCATE TABLE Staging_Generic;
-
--- ==========================
 -- BULK INSERT INTO STAGING TABLE
 -- ==========================
 -- IMPORTANT:
@@ -63,7 +60,10 @@ WITH (
     FIRSTROW = 2,
     FIELDTERMINATOR = ',',
     ROWTERMINATOR = '\n',
-    CODEPAGE = '65001'
+    CODEPAGE = '65001',
+    FORMAT = 'CSV',
+    FIELDQUOTE = '"',
+    TABLOCK
 );
 
 -- ==========================
@@ -107,6 +107,12 @@ WHERE C.Clean_Generic_Name IS NOT NULL
   AND C.Clean_Generic_Name <> '';
 
 -- ==========================
--- CLEANUP staging table
+-- CLEANUP
 -- ==========================
 DROP TABLE Staging_Generic;
+
+-- ==========================
+-- VERIFY
+-- ==========================
+SELECT COUNT(*) AS Drug_Class_Count FROM Drug_Class;
+SELECT COUNT(*) AS Generic_Count FROM Generic;

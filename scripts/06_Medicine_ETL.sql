@@ -5,6 +5,8 @@
 -- with proper FK mapping to Dosage_Form, Generic, and Manufacturer
 -- =================================================
 
+USE PharmaMarketAnalytics;
+GO
 
 -- ==========================
 -- DROP final table if exists
@@ -39,7 +41,6 @@ CREATE TABLE Medicine (
         REFERENCES Manufacturer(Manufacturer_ID)
 );
 
--- ==============
 -- ==========================
 -- DROP staging table if exists
 -- ==========================
@@ -62,11 +63,6 @@ CREATE TABLE Staging_Medicine (
 );
 
 -- ==========================
--- TRUNCATE staging just in case
--- ==========================
-TRUNCATE TABLE Staging_Medicine;
-
--- ==========================
 -- BULK INSERT INTO STAGING TABLE
 -- ==========================
 -- IMPORTANT:
@@ -84,7 +80,10 @@ WITH (
     FIRSTROW = 2,
     FIELDTERMINATOR = ',',
     ROWTERMINATOR = '\n',
-    CODEPAGE = '65001'
+    CODEPAGE = '65001',
+    FORMAT = 'CSV',
+    FIELDQUOTE = '"',
+    TABLOCK
 );
 
 -- ==========================
@@ -126,6 +125,11 @@ LEFT JOIN Manufacturer M
     ON C.Clean_Manufacturer = M.Manufacturer_Name;
 
 -- ==========================
--- CLEANUP staging table
+-- CLEANUP
 -- ==========================
 DROP TABLE Staging_Medicine;
+
+-- ==========================
+-- VERIFY
+-- ==========================
+SELECT COUNT(*) AS Medicine_Count FROM Medicine;
