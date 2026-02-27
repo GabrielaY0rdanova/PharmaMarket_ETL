@@ -8,7 +8,7 @@
 ## 📖 Overview
 This project contains a **full ETL pipeline** for the PharmaMarketAnalytics database.  
 It extracts data from CSV files, performs cleaning and deduplication, and loads it into a structured SQL Server database.  
-The database schema supports drug information, generics, manufacturers, dosage forms, indications, and medicines, including a many-to-many relationship between generics and indications.
+The database schema supports drug information, generics, manufacturers, dosage forms, indications, and medicines — including package sizing, container pricing, and a many-to-many relationship between generics and indications.
 
 ---
 
@@ -36,10 +36,12 @@ PharmaMarket_ETL/
 │   ├── 04_Indication_ETL.sql
 │   ├── 05_Generic_ETL.sql
 │   ├── 06_Medicine_ETL.sql
-│   └── 07_Generic_Indication_ETL.sql
+│   ├── 07_Medicine_PackageSize_ETL.sql
+│   ├── 07b_Medicine_PackageContainer_ETL.sql
+│   └── 08_Generic_Indication_ETL.sql
 │
 ├── tests/                       # Validation and sanity check queries
-│   └── 08_Validation.sql
+│   └── 09_Validation.sql
 │
 └── README.md
 ```
@@ -49,15 +51,17 @@ PharmaMarket_ETL/
 
 The schema includes the following tables:
 
-| Table Name             | Description |
-|------------------------|-------------|
-| Drug_Class             | Drug classes with unique names |
-| Dosage_Form            | Medicine dosage forms |
-| Manufacturer           | Pharmaceutical manufacturers |
-| Indication             | Medical indications/conditions |
-| Generic                | Generic drugs linked to drug classes |
-| Medicine               | Brand medicines linked to generics, manufacturers, and dosage forms |
-| Generic_Indication     | Junction table linking generics to indications (many-to-many) |
+| Table Name                  | Description |
+|-----------------------------|-------------|
+| Drug_Class                  | Drug classes with unique names |
+| Dosage_Form                 | Medicine dosage forms |
+| Manufacturer                | Pharmaceutical manufacturers |
+| Indication                  | Medical indications/conditions |
+| Generic                     | Generic drugs linked to drug classes |
+| Medicine                    | Brand medicines linked to generics, manufacturers, and dosage forms |
+| Medicine_PackageSize        | Pack size options per medicine (e.g. 30's pack, 100's pack) with pack price |
+| Medicine_PackageContainer   | Container size options per medicine (e.g. 100 ml bottle) with unit price |
+| Generic_Indication          | Junction table linking generics to indications (many-to-many) |
 
 For a visual representation, see the ERD diagram below:
 
@@ -78,10 +82,12 @@ For a visual representation, see the ERD diagram below:
    4. `04_Indication_ETL.sql`
    5. `05_Generic_ETL.sql`
    6. `06_Medicine_ETL.sql`
-   7. `07_Generic_Indication_ETL.sql`
+   7. `07_Medicine_PackageSize_ETL.sql`
+   8. `07b_Medicine_PackageContainer_ETL.sql`
+   9. `08_Generic_Indication_ETL.sql`
 
 3. **Validate**  
-   Run `tests/08_Validation.sql` to verify row counts, check for duplicates, confirm referential integrity, and review summary statistics.
+   Run `tests/09_Validation.sql` to verify row counts, check for duplicates, confirm referential integrity, and review summary statistics.
 
 Each ETL script follows this pattern:
 
@@ -93,9 +99,24 @@ Each ETL script follows this pattern:
 - 🗑️ Drop staging table
 - ✅ Verify row count
 
+### 💊 Medicine ETL — Scripts 06, 07, 07b
+
+The Medicine pipeline is split across three scripts due to the complexity of the source data. `Medicine.csv` stores package and pricing information in two raw columns — `Package_Container` and `Package_Size` — each containing multiple formats and embedded currency characters that require multi-step parsing.
+
+**`06_Medicine_ETL.sql`** loads the core Medicine table, extracts unit prices, and cleans the raw container strings in preparation for the two child table scripts.
+
+**`07_Medicine_PackageSize_ETL.sql`** parses the `Package_Size` column into the `Medicine_PackageSize` child table, storing each pack size option (e.g. 30's pack, 100's pack) with its price as a separate row. On completion, it drops the `Package_Size` column from Medicine.
+
+**`07b_Medicine_PackageContainer_ETL.sql`** parses the cleaned `Package_Container` column into the `Medicine_PackageContainer` child table, storing each container size option (e.g. 100 ml bottle, 3 ml cartridge) with its unit price as a separate row. Format B medicines — those sold by unit price only with no physical container description — are also captured here with `Container_Size = NULL`. On completion, it drops the `Package_Container` and `Unit_Price` columns from Medicine.
+
 ## 💡 Notes
 
 - **Generic_Indication** is populated from the `indication` column in `Generic.csv`, which maps each generic drug to its primary medical indication. 1,608 Generic–Indication pairs were loaded successfully.
+
+- **Known data quality issues** carried forward from the source CSV into the database. These are documented in the validation script and flagged for the Data Cleaning project:
+  - **59 true duplicate Medicine rows** — same Brand_Name, Strength, Dosage_Form, and Manufacturer — caused by CSV parsing artifacts in the source file. They survive the `DISTINCT` clause due to subtle field differences.
+  - **214 medicines with no Generic match** and **147 with no Manufacturer match** — caused by name mismatches between `Medicine.csv` and the reference CSVs.
+  - **1 Medicine_PackageSize duplicate group** (Unisaline Fruity) and **3 Medicine_PackageContainer duplicate groups** (Cholera Fluid, Glucose Saline, Normal Saline) — all caused by the upstream Medicine duplicates above.
 
 - CSV files in `source_data/` follow PascalCase naming to match the SQL scripts.
 
@@ -140,12 +161,13 @@ FROM 'E:\Data Analysis\My Projects\PharmaMarket_ETL\source_data\'
 - **SQL Server / T-SQL**
 - **BULK INSERT** with `FORMAT = 'CSV'` and `FIELDQUOTE` for robust CSV parsing
 - **CTEs** for data cleaning and deduplication
+- **Window functions** for block-level parsing of multi-value package strings
 - **Primary Keys, Foreign Keys, Unique Constraints** for data integrity
 
 ## 🚀 Upcoming Projects
 This ETL pipeline is the foundation for a series of follow-up projects using the PharmaMarketAnalytics database:
 
-- 🧹 **Data Cleaning** — Deeper data quality work: handling nulls, standardizing drug names and dosage formats, validating foreign key relationships, and ensuring consistency across the dataset.
+- 🧹 **Data Cleaning** — Deeper data quality work: resolving the 59 duplicate Medicine rows, standardizing drug names and dosage formats, validating foreign key relationships, and ensuring consistency across the dataset.
 - 🔍 **Exploratory Data Analysis (EDA)** — Uncovering patterns in drug classes, generics, manufacturers, and indications through analytical SQL queries and summary statistics.
 - 📊 **Data Visualization** — An interactive dashboard presenting key insights from the database, including drug distribution, manufacturer market share, and indication trends.
 

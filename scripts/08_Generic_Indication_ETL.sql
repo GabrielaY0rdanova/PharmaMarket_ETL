@@ -1,5 +1,5 @@
 -- =================================================
--- 07_Generic_Indication_ETL.sql
+-- 08_Generic_Indication_ETL.sql
 -- Populates the Generic_Indication junction table
 -- from the indication column in Generic.csv
 -- =================================================
