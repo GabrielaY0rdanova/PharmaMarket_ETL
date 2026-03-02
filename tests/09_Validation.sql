@@ -110,8 +110,8 @@ FROM (
 
 -- Medicine_PackageSize: natural key is Brand_ID + Pack_Size + Pack_Price.
 -- The same pack size can legitimately appear twice for a Brand_ID if the
--- containers differ in price (e.g. Colmint 30's pack at ৳180.00 and ৳210.60,
--- Neos-R 5's pack at ৳40.00 and ৳175.00 for different ampoule sizes).
+-- containers differ in price (e.g. Colmint 30's pack at 180.00 and 210.60,
+-- Neos-R 5's pack at 40.00 and 175.00 for different ampoule sizes).
 -- Known result: 1 — Unisaline Fruity triplicate caused by upstream Medicine
 -- duplicate in raw CSV. Candidate for deduplication in the Data Cleaning project.
 SELECT 'Medicine_PackageSize — duplicate Brand_ID + Pack_Size + Pack_Price' AS Check_Name,
@@ -220,14 +220,19 @@ WHERE Container_Size IS NULL
 
 -- Known result: 39
 -- Breakdown:
---   ~8  rows : Container_Size = 'Not for sale'    — no pricing data in source
+--   ~11 rows : Container_Size = 'Not for sale'      — no pricing data in source
 --   ~28 rows : Container_Size = 'Price Unavailable' — price pending publication
---   ~3  rows : µg pre-filled syringe rows          — valid container, no listed price
 -- All are legitimate source data values, not ETL parsing failures.
 SELECT 'Medicine_PackageContainer — NULL Unit_Price' AS Check_Name,
        COUNT(*) AS IssueCount
 FROM Medicine_PackageContainer
 WHERE Unit_Price IS NULL;
+
+-- Known result: 0 — every row must have a Container_Type assigned by ETL
+SELECT 'Medicine_PackageContainer — NULL Container_Type' AS Check_Name,
+       COUNT(*) AS IssueCount
+FROM Medicine_PackageContainer
+WHERE Container_Type IS NULL;
 GO
 
 -- =================================================
@@ -312,25 +317,20 @@ GO
 -- SECTION 6: ENCODING CHECKS
 -- Medicine_PackageContainer.Container_Size replaces the dropped
 -- Medicine.Package_Container column for encoding verification.
+-- µg was standardised to mcg by 07b typo correction — expected 0.
 -- =================================================
 
--- Known result: 0 — ৳ signs were cleaned by 06 and do not appear in Container_Size
-SELECT 'Medicine_PackageContainer — currency character (৳) in Container_Size' AS Check_Name,
+-- Known result: 0 — currency signs were cleaned by 06 and do not appear in Container_Size
+SELECT 'Medicine_PackageContainer — currency character in Container_Size' AS Check_Name,
        COUNT(*) AS IssueCount
 FROM Medicine_PackageContainer
 WHERE Container_Size LIKE '%' + NCHAR(2547) + '%';
 
+-- Known result: 0 — µg standardised to mcg by 07b typo correction
 SELECT 'Medicine_PackageContainer — non-ASCII characters in Container_Size' AS Check_Name,
        COUNT(*) AS IssueCount
 FROM Medicine_PackageContainer
-WHERE Container_Size COLLATE Latin1_General_BIN LIKE '%[^ -~]%'
-  AND Container_Size NOT LIKE '%µ%';
-
--- Known result: 3 — µg rows legitimately contain the µ character
-SELECT 'Medicine_PackageContainer — rows with µ character (expected 3)' AS Check_Name,
-       COUNT(*) AS IssueCount
-FROM Medicine_PackageContainer
-WHERE Container_Size LIKE '%µ%';
+WHERE Container_Size COLLATE Latin1_General_BIN LIKE '%[^ -~]%';
 GO
 
 -- =================================================
@@ -433,11 +433,21 @@ SELECT
 FROM Medicine_PackageContainer
 WHERE Unit_Price IS NOT NULL;
 
+-- Container_Type distribution — review for unexpected categories or N/A counts
+-- Known N/A: 3 rows (250 mg x2, 500 mg x1) — plain quantity strings with no container info
+SELECT
+    Container_Type,
+    COUNT(*) AS Frequency
+FROM Medicine_PackageContainer
+GROUP BY Container_Type
+ORDER BY Frequency DESC;
+
 -- Medicines with no entry in either child table.
 -- These are medicines where Package_Container = NULL AND Unit_Price = NULL
 -- in the source — no pricing or container data was present at all.
 -- Known result: 42 — confirmed as legitimate source data gaps, not ETL failures.
--- Candidate for review in the Data Cleaning project.SELECT 'Medicine — Brand_ID in neither PackageSize nor PackageContainer' AS Check_Name,
+-- Candidate for review in the Data Cleaning project.
+SELECT 'Medicine — Brand_ID in neither PackageSize nor PackageContainer' AS Check_Name,
        COUNT(*) AS IssueCount
 FROM Medicine m
 WHERE NOT EXISTS (SELECT 1 FROM Medicine_PackageSize ps WHERE ps.Brand_ID = m.Brand_ID)
@@ -476,6 +486,7 @@ SELECT TOP 20
     m.Brand_Name,
     m.Strength,
     pc.Container_Size,
+    pc.Container_Type,
     pc.Unit_Price
 FROM Medicine m
 INNER JOIN Medicine_PackageContainer pc ON m.Brand_ID = pc.Brand_ID

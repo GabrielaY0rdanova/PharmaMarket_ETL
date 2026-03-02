@@ -2,7 +2,8 @@
 -- 07b_Medicine_PackageContainer_ETL.sql
 -- Creates and populates the Medicine_PackageContainer child table
 -- Parses cleaned Package_Container strings from Medicine into
--- normalized rows with separate Container_Size and Unit_Price columns
+-- normalized rows with separate Container_Size, Unit_Price,
+-- and Container_Type columns
 --
 -- Runs AFTER 07_Medicine_PackageSize_ETL.sql
 -- Reads Package_Container from Medicine (cleaned by 06_Medicine_ETL.sql)
@@ -16,6 +17,7 @@
 --
 -- Currency character: NCHAR(2547) = ৳ (Bengali taka sign)
 -- Unit_Price stored as DECIMAL(10,2) in BDT
+-- Container_Type derived from Container_Size after typo correction
 -- =================================================
 
 USE PharmaMarketAnalytics;
@@ -34,6 +36,7 @@ CREATE TABLE Medicine_PackageContainer (
     Brand_ID             INT NOT NULL,
     Container_Size       NVARCHAR(255),
     Unit_Price           DECIMAL(10,2),
+    Container_Type       NVARCHAR(50),
 
     CONSTRAINT FK_PackageContainer_Medicine
         FOREIGN KEY (Brand_ID)
@@ -579,12 +582,125 @@ WHERE Package_Container IS NULL
 SELECT COUNT(*) AS Total_After_FormatB FROM Medicine_PackageContainer;
 
 -- ==========================
+-- FIX TYPOS in Container_Size
+-- Run before Container_Type is populated so LIKE patterns match cleanly
+-- ==========================
+
+-- litter → liter (misspelling in bulk/large container descriptions)
+UPDATE Medicine_PackageContainer
+SET Container_Size = REPLACE(Container_Size, 'litter', 'liter')
+WHERE Container_Size LIKE '%litter%';
+
+-- botttle → bottle (double-t typo)
+UPDATE Medicine_PackageContainer
+SET Container_Size = REPLACE(Container_Size, 'botttle', 'bottle')
+WHERE Container_Size LIKE '%botttle%';
+
+-- prefilled → pre-filled (inconsistent hyphenation)
+UPDATE Medicine_PackageContainer
+SET Container_Size = REPLACE(Container_Size, 'prefilled', 'pre-filled')
+WHERE Container_Size LIKE '%prefilled%';
+
+-- per-filled → pre-filled (misspelling in pre-filled pen descriptions)
+UPDATE Medicine_PackageContainer
+SET Container_Size = REPLACE(Container_Size, 'per-filled', 'pre-filled')
+WHERE Container_Size LIKE '%per-filled%';
+
+-- µg → mcg (standardise microgram symbol)
+UPDATE Medicine_PackageContainer
+SET Container_Size = REPLACE(Container_Size, 'µg', 'mcg')
+WHERE Container_Size LIKE '%µg%';
+
+-- ==========================
+-- VERIFY typo fixes
+-- ==========================
+SELECT COUNT(*) AS Remaining_Typos
+FROM Medicine_PackageContainer
+WHERE Container_Size LIKE '%litter%'
+   OR Container_Size LIKE '%botttle%'
+   OR Container_Size LIKE '%prefilled%'
+   OR Container_Size LIKE '%per-filled%'
+   OR Container_Size LIKE N'%µg%';
+-- Expected: 0
+
+-- ==========================
+-- POPULATE Container_Type
+-- Derived from Container_Size using LIKE pattern matching
+-- NULL (Format B) and placeholder rows categorised explicitly
+-- ==========================
+UPDATE Medicine_PackageContainer
+SET Container_Type =
+    CASE
+        WHEN Container_Size IS NULL                                     THEN 'Unit-Priced'
+        WHEN Container_Size IN ('Price Unavailable', 'Not for sale')    THEN 'Placeholder'
+        WHEN Container_Size LIKE '%bottle%'                             THEN 'Bottle'
+        WHEN Container_Size LIKE '%syrup%'                              THEN 'Bottle'
+        WHEN Container_Size LIKE '%vial%'                               THEN 'Vial'
+        WHEN Container_Size LIKE '%tube%'                               THEN 'Tube'
+        WHEN Container_Size LIKE '%ampoule%'                            THEN 'Ampoule'
+        WHEN Container_Size LIKE '%drop%'                               THEN 'Drop'
+        WHEN Container_Size LIKE '%metered%'
+          OR Container_Size LIKE '%doses%'
+          OR Container_Size LIKE '%puffs%'
+          OR Container_Size LIKE '%inhaler%'
+          OR Container_Size LIKE '%maxhaler%'                           THEN 'Inhaler'
+        WHEN Container_Size LIKE '%pre-filled syringe%'                 THEN 'Pre-filled Syringe'
+        WHEN Container_Size LIKE '%pre-filled pen%'
+          OR Container_Size LIKE '%FlexTouch%'
+          OR Container_Size LIKE '%KwikPen%'
+          OR Container_Size LIKE '%BioPen%'
+          OR Container_Size LIKE '%PenSet%'
+          OR Container_Size LIKE '%flexpen%'
+          OR Container_Size LIKE '%penfill%'
+          OR Container_Size LIKE '%Kit Pen%'                            THEN 'Pen'
+        WHEN Container_Size LIKE '%cartridge%'                          THEN 'Cartridge'
+        WHEN Container_Size LIKE '%sachet%'                             THEN 'Sachet'
+        WHEN Container_Size LIKE '%bag%'                                THEN 'Bag'
+        WHEN Container_Size LIKE '%strip%'
+          OR Container_Size LIKE '%blister%'                            THEN 'Strip/Blister'
+        WHEN Container_Size LIKE '%tablet%'                             THEN 'Tablet Kit'
+        WHEN Container_Size LIKE '%pack%'                               THEN 'Pack'
+        WHEN Container_Size LIKE '%jar%'                                THEN 'Jar'
+        WHEN Container_Size LIKE '%container%'                          THEN 'Container'
+        WHEN Container_Size LIKE '%spray%'                              THEN 'Spray'
+        WHEN Container_Size LIKE '%tin%'
+          OR Container_Size LIKE '%can%'                                THEN 'Tin/Can'
+        WHEN Container_Size LIKE '%pen%'                                THEN 'Pen'
+        WHEN Container_Size LIKE '%solution%'                           THEN 'Solution'
+        WHEN Container_Size LIKE '%pot%'                                THEN 'Pot'
+        WHEN Container_Size LIKE '%gel%'                                THEN 'Gel'
+        WHEN Container_Size LIKE '%ointment%'                           THEN 'Ointment'
+        WHEN Container_Size LIKE '%bar%'                                THEN 'Bar'
+        WHEN Container_Size LIKE '%applicator%'                         THEN 'Applicator'
+        WHEN Container_Size LIKE '%Ifamide%'                            THEN 'Vial'
+        WHEN Container_Size LIKE '%white%green%'                        THEN 'Strip/Blister'
+        ELSE                                                             'N/A'
+    END;
+
+-- ==========================
+-- VERIFY Container_Type population
+-- ==========================
+SELECT
+    Container_Type,
+    COUNT(*) AS Frequency
+FROM Medicine_PackageContainer
+GROUP BY Container_Type
+ORDER BY Frequency DESC;
+-- Expected: no NULLs, Uncategorized should be minimal (250 mg / 500 mg plain quantity rows)
+
+SELECT COUNT(*) AS Null_Container_Type
+FROM Medicine_PackageContainer
+WHERE Container_Type IS NULL;
+-- Expected: 0
+
+-- ==========================
 -- VERIFY all inserts complete
 -- ==========================
 SELECT
     COUNT(*)                                                        AS Total_Rows,
     SUM(CASE WHEN Container_Size IS NULL THEN 1 ELSE 0 END)        AS Null_Container_Size,
     SUM(CASE WHEN Unit_Price IS NULL THEN 1 ELSE 0 END)            AS Null_Unit_Price,
+    SUM(CASE WHEN Container_Type IS NULL THEN 1 ELSE 0 END)        AS Null_Container_Type,
     COUNT(DISTINCT Brand_ID)                                        AS Distinct_Medicines
 FROM Medicine_PackageContainer;
 
@@ -594,7 +710,8 @@ SELECT TOP 20
     m.Brand_Name,
     m.Package_Container  AS Raw_Input,
     pc.Container_Size,
-    pc.Unit_Price
+    pc.Unit_Price,
+    pc.Container_Type
 FROM Medicine m
 INNER JOIN Medicine_PackageContainer pc ON m.Brand_ID = pc.Brand_ID
 ORDER BY m.Brand_ID, pc.PackageContainer_ID;
@@ -640,5 +757,6 @@ SELECT
     COUNT(*)                                                        AS Total_PackageContainer_Rows,
     SUM(CASE WHEN Container_Size IS NULL THEN 1 ELSE 0 END)        AS Null_Container_Size,
     SUM(CASE WHEN Unit_Price IS NULL THEN 1 ELSE 0 END)            AS Null_Unit_Price,
+    SUM(CASE WHEN Container_Type IS NULL THEN 1 ELSE 0 END)        AS Null_Container_Type,
     COUNT(DISTINCT Brand_ID)                                        AS Distinct_Medicines
 FROM Medicine_PackageContainer;

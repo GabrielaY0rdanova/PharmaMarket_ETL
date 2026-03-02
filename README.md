@@ -60,7 +60,7 @@ The schema includes the following tables:
 | Generic                     | Generic drugs linked to drug classes |
 | Medicine                    | Brand medicines linked to generics, manufacturers, and dosage forms |
 | Medicine_PackageSize        | Pack size options per medicine (e.g. 30's pack, 100's pack) with pack price |
-| Medicine_PackageContainer   | Container size options per medicine (e.g. 100 ml bottle) with unit price |
+| Medicine_PackageContainer   | Container size options per medicine (e.g. 100 ml bottle, 3 ml cartridge) with unit price and derived container type category |
 | Generic_Indication          | Junction table linking generics to indications (many-to-many) |
 
 For a visual representation, see the ERD diagram below:
@@ -107,7 +107,7 @@ The Medicine pipeline is split across three scripts due to the complexity of the
 
 **`07_Medicine_PackageSize_ETL.sql`** parses the `Package_Size` column into the `Medicine_PackageSize` child table, storing each pack size option (e.g. 30's pack, 100's pack) with its price as a separate row. On completion, it drops the `Package_Size` column from Medicine.
 
-**`07b_Medicine_PackageContainer_ETL.sql`** parses the cleaned `Package_Container` column into the `Medicine_PackageContainer` child table, storing each container size option (e.g. 100 ml bottle, 3 ml cartridge) with its unit price as a separate row. Format B medicines — those sold by unit price only with no physical container description — are also captured here with `Container_Size = NULL`. On completion, it drops the `Package_Container` and `Unit_Price` columns from Medicine.
+**`07b_Medicine_PackageContainer_ETL.sql`** parses the cleaned `Package_Container` column into the `Medicine_PackageContainer` child table, storing each container size option (e.g. 100 ml bottle, 3 ml cartridge) with its unit price as a separate row. Format B medicines — those sold by unit price only with no physical container description — are also captured here with `Container_Size = NULL`. After all rows are inserted, the script corrects known Container_Size typos (misspellings of liter, bottle, pre-filled, and the µg symbol) and derives a `Container_Type` category column using LIKE pattern matching (e.g. Bottle, Vial, Tube, Ampoule, Inhaler, Pre-filled Syringe). On completion, it drops the `Package_Container` and `Unit_Price` columns from Medicine.
 
 ## 💡 Notes
 
