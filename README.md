@@ -181,9 +181,10 @@ This dataset is used for educational purposes and to demonstrate ETL workflows.
 
 ## 👩‍💻 About Me
 
-Hi! I'm [Gabriela Yordanova](https://www.linkedin.com/in/gabriela-yordanova-837ba2124/). I have 10 years of experience in pharmacy, which gives me genuine domain expertise in pharmaceutical data and a deep interest in making that data structured, accessible, and useful.
-
-This project demonstrates my skills in **SQL, ETL, data cleaning, and database design**, transforming a real-world medicine dataset into a structured, relational database. I enjoy turning raw data into actionable insights and building projects that reflect real-world data workflows.
+Hi! I'm [Gabriela Yordanova](https://www.linkedin.com/in/gabriela-yordanova-837ba2124/). 
+My background in pharmacy gives me genuine domain expertise in pharmaceutical data — 
+I know what the data means, not just what it looks like. This project is where it all 
+starts: raw CSVs transformed into a clean, structured relational database ready for analysis.
 
 *This project is part of my portfolio showcasing data engineering and ETL skills.*
 
