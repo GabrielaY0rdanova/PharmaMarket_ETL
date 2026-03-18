@@ -167,8 +167,8 @@ FROM 'E:\Data Analysis\My Projects\PharmaMarket_ETL\source_data\'
 ## 🚀 Upcoming Projects
 This ETL pipeline is the foundation for a series of follow-up projects using the PharmaMarketAnalytics database:
 
-- 🧹 **Data Cleaning** — Deeper data quality work: resolving the 59 duplicate Medicine rows, standardizing drug names and dosage formats, validating foreign key relationships, and ensuring consistency across the dataset.
-- 🔍 **Exploratory Data Analysis (EDA)** — Uncovering patterns in drug classes, generics, manufacturers, and indications through analytical SQL queries and summary statistics.
+- 🧹 [**Data Cleaning**](https://github.com/GabrielaY0rdanova/PharmaMarket_Cleaning) — Deeper data quality work: resolving the 59 duplicate Medicine rows, standardizing drug names and dosage formats, validating foreign key relationships, and ensuring consistency across the dataset.
+- 🔍 [**Exploratory Data Analysis (EDA)**](https://github.com/GabrielaY0rdanova/PharmaMarket_EDA) — Uncovering patterns in drug classes, generics, manufacturers, and indications through analytical SQL queries and summary statistics.
 - 📊 **Data Visualization** — An interactive dashboard presenting key insights from the database, including drug distribution, manufacturer market share, and indication trends.
 
 ## 📚 Data Source
@@ -181,7 +181,8 @@ This dataset is used for educational purposes and to demonstrate ETL workflows.
 
 ## 👩‍💻 About Me
 
-Hi! I'm [Gabriela Yordanova](https://www.linkedin.com/in/gabriela-yordanova-837ba2124/). 
+Hi! I'm [Gabriela Yordanova](https://www.linkedin.com/in/gabriela-yordanova-837ba2124/). Check out my full portfolio 🗂️ [here](https://gabrielay0rdanova.github.io/).
+ 
 My background in pharmacy gives me genuine domain expertise in pharmaceutical data — 
 I know what the data means, not just what it looks like. This project is where it all 
 starts: raw CSVs transformed into a clean, structured relational database ready for analysis.
