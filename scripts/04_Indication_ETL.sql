@@ -5,8 +5,13 @@
 -- and inserts into the final Indication table
 -- =================================================
 
-USE PharmaMarketAnalytics;
+USE [$(DatabaseName)];
 GO
+
+SET XACT_ABORT ON;
+
+BEGIN TRY
+    BEGIN TRANSACTION;
 
 -- ==========================
 -- DROP final table if exists
@@ -45,12 +50,12 @@ CREATE TABLE Staging_Indication (
 -- of the cloned repository on your local machine.
 --
 -- Example root folder:
--- E:\Data Analysis\My Projects\PharmaMarket_ETL\
+-- E:\Data Analysis\My Projects\PharmaMarket Data Platform\PharmaMarket_ETL\
 --
 -- SQL Server must have access to this location.
 -- ==========================
 BULK INSERT Staging_Indication
-FROM 'E:\Data Analysis\My Projects\PharmaMarket_ETL\source_data\Indication.csv'
+FROM 'E:\Data Analysis\My Projects\PharmaMarket Data Platform\PharmaMarket_ETL\source_data\Indication.csv'
 WITH (
     FIRSTROW = 2,
     FIELDTERMINATOR = ',',
@@ -92,3 +97,10 @@ DROP TABLE Staging_Indication;
 -- VERIFY
 -- ==========================
 SELECT COUNT(*) AS Indication_Count FROM Indication;
+
+    COMMIT TRANSACTION;
+END TRY
+BEGIN CATCH
+    IF XACT_STATE() <> 0 ROLLBACK TRANSACTION;
+    THROW;
+END CATCH;

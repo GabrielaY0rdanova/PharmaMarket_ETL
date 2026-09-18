@@ -4,8 +4,13 @@
 -- Creates staging table, cleans data, and inserts into final table
 -- =================================================
 
-USE PharmaMarketAnalytics;
+USE [$(DatabaseName)];
 GO
+
+SET XACT_ABORT ON;
+
+BEGIN TRY
+    BEGIN TRANSACTION;
 
 -- ==========================
 -- DROP final table if exists
@@ -43,12 +48,12 @@ CREATE TABLE Staging_Drug_Class (
 -- of the cloned repository on your local machine.
 --
 -- Example root folder:
--- E:\Data Analysis\My Projects\PharmaMarket_ETL\
+-- E:\Data Analysis\My Projects\PharmaMarket Data Platform\PharmaMarket_ETL\
 --
 -- SQL Server must have access to this location.
 -- ==========================
 BULK INSERT Staging_Drug_Class
-FROM 'E:\Data Analysis\My Projects\PharmaMarket_ETL\source_data\Drug_Class.csv'
+FROM 'E:\Data Analysis\My Projects\PharmaMarket Data Platform\PharmaMarket_ETL\source_data\Drug_Class.csv'
 WITH (
     FIRSTROW = 2,
     FIELDTERMINATOR = ',',
@@ -88,3 +93,10 @@ DROP TABLE Staging_Drug_Class;
 -- VERIFY
 -- ==========================
 SELECT COUNT(*) AS Drug_Class_Count FROM Drug_Class;
+
+    COMMIT TRANSACTION;
+END TRY
+BEGIN CATCH
+    IF XACT_STATE() <> 0 ROLLBACK TRANSACTION;
+    THROW;
+END CATCH;

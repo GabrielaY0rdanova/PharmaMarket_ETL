@@ -15,7 +15,7 @@
 --   Sections 9-10 — review manually for sense-checking
 -- =================================================
 
-USE PharmaMarketAnalytics;
+USE [$(DatabaseName)];
 GO
 
 -- =================================================
@@ -250,20 +250,23 @@ WHERE dc.Drug_Class_ID IS NULL;
 SELECT 'Medicine -> Dosage_Form broken FK' AS Check_Name,
        COUNT(*) AS IssueCount
 FROM Medicine m
-INNER JOIN Dosage_Form df ON m.Dosage_Form_ID = df.Dosage_Form_ID
-WHERE df.Dosage_Form_ID IS NULL;
+LEFT JOIN Dosage_Form df ON m.Dosage_Form_ID = df.Dosage_Form_ID
+WHERE m.Dosage_Form_ID IS NOT NULL
+  AND df.Dosage_Form_ID IS NULL;
 
 SELECT 'Medicine -> Generic broken FK' AS Check_Name,
        COUNT(*) AS IssueCount
 FROM Medicine m
-INNER JOIN Generic g ON m.Generic_ID = g.Generic_ID
-WHERE g.Generic_ID IS NULL;
+LEFT JOIN Generic g ON m.Generic_ID = g.Generic_ID
+WHERE m.Generic_ID IS NOT NULL
+  AND g.Generic_ID IS NULL;
 
 SELECT 'Medicine -> Manufacturer broken FK' AS Check_Name,
        COUNT(*) AS IssueCount
 FROM Medicine m
-INNER JOIN Manufacturer mf ON m.Manufacturer_ID = mf.Manufacturer_ID
-WHERE mf.Manufacturer_ID IS NULL;
+LEFT JOIN Manufacturer mf ON m.Manufacturer_ID = mf.Manufacturer_ID
+WHERE m.Manufacturer_ID IS NOT NULL
+  AND mf.Manufacturer_ID IS NULL;
 
 SELECT 'Medicine_PackageSize -> Medicine broken FK' AS Check_Name,
        COUNT(*) AS IssueCount
@@ -358,7 +361,7 @@ WHERE g.Generic_ID IS NULL;
 
 SELECT TOP 20
     dc.Drug_Class_Name,
-    COUNT(g.Generic_ID) AS Generic_Count
+    SUM(CASE WHEN g.Generic_ID IS NULL THEN 0 ELSE 1 END) AS Generic_Count
 FROM Drug_Class dc
 LEFT JOIN Generic g ON dc.Drug_Class_ID = g.Drug_Class_ID
 GROUP BY dc.Drug_Class_Name
@@ -568,11 +571,23 @@ FROM Medicine_PackageSize;
 
 -- Medicine_PackageContainer summary
 SELECT
-    COUNT(DISTINCT Brand_ID)    AS Medicines_With_Containers,
-    COUNT(*)                    AS Total_Container_Rows,
-    MIN(Unit_Price)             AS Cheapest_Container,
-    MAX(Unit_Price)             AS Most_Expensive_Container
-FROM Medicine_PackageContainer;
+    totals.Medicines_With_Containers,
+    totals.Total_Container_Rows,
+    prices.Cheapest_Container,
+    prices.Most_Expensive_Container
+FROM (
+    SELECT
+        COUNT(DISTINCT Brand_ID) AS Medicines_With_Containers,
+        COUNT(*)                 AS Total_Container_Rows
+    FROM Medicine_PackageContainer
+) totals
+CROSS JOIN (
+    SELECT
+        MIN(Unit_Price) AS Cheapest_Container,
+        MAX(Unit_Price) AS Most_Expensive_Container
+    FROM Medicine_PackageContainer
+    WHERE Unit_Price IS NOT NULL
+) prices;
 GO
 
 -- =================================================

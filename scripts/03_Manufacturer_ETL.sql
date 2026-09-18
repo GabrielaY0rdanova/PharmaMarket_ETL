@@ -5,8 +5,13 @@
 -- and inserts into the final Manufacturer table
 -- =================================================
 
-USE PharmaMarketAnalytics;
+USE [$(DatabaseName)];
 GO
+
+SET XACT_ABORT ON;
+
+BEGIN TRY
+    BEGIN TRANSACTION;
 
 -- ==========================
 -- DROP final table if exists
@@ -46,12 +51,12 @@ CREATE TABLE Staging_Manufacturer (
 -- of the cloned repository on your local machine.
 --
 -- Example root folder:
--- E:\Data Analysis\My Projects\PharmaMarket_ETL\
+-- E:\Data Analysis\My Projects\PharmaMarket Data Platform\PharmaMarket_ETL\
 --
 -- SQL Server must have access to this location.
 -- ==========================
 BULK INSERT Staging_Manufacturer
-FROM 'E:\Data Analysis\My Projects\PharmaMarket_ETL\source_data\Manufacturer.csv'
+FROM 'E:\Data Analysis\My Projects\PharmaMarket Data Platform\PharmaMarket_ETL\source_data\Manufacturer.csv'
 WITH (
     FIRSTROW = 2,
     FIELDTERMINATOR = ',',
@@ -93,3 +98,10 @@ DROP TABLE Staging_Manufacturer;
 -- VERIFY
 -- ==========================
 SELECT COUNT(*) AS Manufacturer_Count FROM Manufacturer;
+
+    COMMIT TRANSACTION;
+END TRY
+BEGIN CATCH
+    IF XACT_STATE() <> 0 ROLLBACK TRANSACTION;
+    THROW;
+END CATCH;

@@ -5,8 +5,13 @@
 -- and inserts into the final Generic table with proper FK mapping
 -- =================================================
 
-USE PharmaMarketAnalytics;
+USE [$(DatabaseName)];
 GO
+
+SET XACT_ABORT ON;
+
+BEGIN TRY
+    BEGIN TRANSACTION;
 
 -- ==========================
 -- DROP final table if exists
@@ -50,12 +55,12 @@ CREATE TABLE Staging_Generic (
 -- of the cloned repository on your local machine.
 --
 -- Example root folder:
--- E:\Data Analysis\My Projects\PharmaMarket_ETL\
+-- E:\Data Analysis\My Projects\PharmaMarket Data Platform\PharmaMarket_ETL\
 --
 -- SQL Server must have access to this location.
 -- ==========================
 BULK INSERT Staging_Generic
-FROM 'E:\Data Analysis\My Projects\PharmaMarket_ETL\source_data\Generic.csv'
+FROM 'E:\Data Analysis\My Projects\PharmaMarket Data Platform\PharmaMarket_ETL\source_data\Generic.csv'
 WITH (
     FIRSTROW = 2,
     FIELDTERMINATOR = ',',
@@ -114,3 +119,10 @@ DROP TABLE Staging_Generic;
 -- ==========================
 SELECT COUNT(*) AS Drug_Class_Count FROM Drug_Class;
 SELECT COUNT(*) AS Generic_Count FROM Generic;
+
+    COMMIT TRANSACTION;
+END TRY
+BEGIN CATCH
+    IF XACT_STATE() <> 0 ROLLBACK TRANSACTION;
+    THROW;
+END CATCH;

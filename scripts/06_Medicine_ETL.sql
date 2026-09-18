@@ -28,8 +28,13 @@
 --   - Orphaned price between containers: '10 mg vial,420.00,50 mg vial' → '10 mg vial,50 mg vial'
 -- =================================================
 
-USE PharmaMarketAnalytics;
+USE [$(DatabaseName)];
 GO
+
+SET XACT_ABORT ON;
+
+BEGIN TRY
+    BEGIN TRANSACTION;
 
 -- ==========================
 -- DROP final table if exists
@@ -94,12 +99,12 @@ CREATE TABLE Staging_Medicine (
 -- of the cloned repository on your local machine.
 --
 -- Example root folder:
--- E:\Data Analysis\My Projects\PharmaMarket_ETL\
+-- E:\Data Analysis\My Projects\PharmaMarket Data Platform\PharmaMarket_ETL\
 --
 -- SQL Server must have access to this location.
 -- ==========================
 BULK INSERT Staging_Medicine
-FROM 'E:\Data Analysis\My Projects\PharmaMarket_ETL\source_data\Medicine.csv'
+FROM 'E:\Data Analysis\My Projects\PharmaMarket Data Platform\PharmaMarket_ETL\source_data\Medicine.csv'
 WITH (
     FIRSTROW = 2,
     FIELDTERMINATOR = ',',
@@ -397,3 +402,10 @@ SELECT
     SUM(CASE WHEN Package_Container LIKE '%' + NCHAR(2547) + '%'
              THEN 1 ELSE 0 END)                               AS Dirty_Container_Rows
 FROM Medicine;
+
+    COMMIT TRANSACTION;
+END TRY
+BEGIN CATCH
+    IF XACT_STATE() <> 0 ROLLBACK TRANSACTION;
+    THROW;
+END CATCH;

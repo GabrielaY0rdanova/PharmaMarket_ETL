@@ -20,8 +20,13 @@
 -- Container_Type derived from Container_Size after typo correction
 -- =================================================
 
-USE PharmaMarketAnalytics;
+USE [$(DatabaseName)];
 GO
+
+SET XACT_ABORT ON;
+
+BEGIN TRY
+    BEGIN TRANSACTION;
 
 -- ==========================
 -- DROP child table if exists
@@ -760,3 +765,10 @@ SELECT
     SUM(CASE WHEN Container_Type IS NULL THEN 1 ELSE 0 END)        AS Null_Container_Type,
     COUNT(DISTINCT Brand_ID)                                        AS Distinct_Medicines
 FROM Medicine_PackageContainer;
+
+    COMMIT TRANSACTION;
+END TRY
+BEGIN CATCH
+    IF XACT_STATE() <> 0 ROLLBACK TRANSACTION;
+    THROW;
+END CATCH;

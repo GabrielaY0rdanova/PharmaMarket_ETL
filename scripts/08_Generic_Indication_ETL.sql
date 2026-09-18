@@ -4,8 +4,13 @@
 -- from the indication column in Generic.csv
 -- =================================================
 
-USE PharmaMarketAnalytics;
+USE [$(DatabaseName)];
 GO
+
+SET XACT_ABORT ON;
+
+BEGIN TRY
+    BEGIN TRANSACTION;
 
 -- ==========================
 -- DROP and recreate table
@@ -48,7 +53,7 @@ CREATE TABLE Staging_Generic (
 -- ==========================
 -- IMPORTANT: Update file path to match your local machine.
 BULK INSERT Staging_Generic
-FROM 'E:\Data Analysis\My Projects\PharmaMarket_ETL\source_data\Generic.csv'
+FROM 'E:\Data Analysis\My Projects\PharmaMarket Data Platform\PharmaMarket_ETL\source_data\Generic.csv'
 WITH (
     FIRSTROW = 2,
     FIELDTERMINATOR = ',',
@@ -98,3 +103,10 @@ DROP TABLE Staging_Generic;
 -- VERIFY
 -- ==========================
 SELECT COUNT(*) AS Generic_Indication_Count FROM Generic_Indication;
+
+    COMMIT TRANSACTION;
+END TRY
+BEGIN CATCH
+    IF XACT_STATE() <> 0 ROLLBACK TRANSACTION;
+    THROW;
+END CATCH;

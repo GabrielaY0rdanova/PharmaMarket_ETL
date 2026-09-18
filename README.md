@@ -1,194 +1,195 @@
-# 🏗️ PharmaMarket_ETL
-## 🏷️ Project Badges
+# PharmaMarket ETL
 
-![SQL Server](https://img.shields.io/badge/SQL%20Server-2022-blue?logo=microsoftsqlserver&logoColor=white)
+![SQL Server](https://img.shields.io/badge/SQL%20Server-T--SQL-blue?logo=microsoftsqlserver&logoColor=white)
 ![Kaggle](https://img.shields.io/badge/Kaggle-Dataset-orange?logo=kaggle&logoColor=white)
 ![License](https://img.shields.io/badge/License-MIT-lightgrey)
 
-## 📖 Overview
-This project contains a **full ETL pipeline** for the PharmaMarketAnalytics database.  
-It extracts data from CSV files, performs cleaning and deduplication, and loads it into a structured SQL Server database.  
-The database schema supports drug information, generics, manufacturers, dosage forms, indications, and medicines — including package sizing, container pricing, and a many-to-many relationship between generics and indications.
+## Overview
 
----
+This repository contains the ETL layer of the PharmaMarket Data Platform. It loads six source CSV files into a structured SQL Server database and prepares the relational model for the separate cleaning and analysis projects.
 
-## 🗂️ Project Structure
+The project deliberately uses SQL Server Management Studio for the ETL work. The later EDA stage moves to PostgreSQL and VS Code, showing the same dataset across different tools and workflows.
 
-```
+The schema covers drug classes, dosage forms, manufacturers, indications, generics, medicines, pack sizes, container options and the relationship between generics and their primary indications.
+
+## Project structure
+
+```text
 PharmaMarket_ETL/
-│
-├── docs/                        # ER diagrams and visuals
-│   └── Pharma_ERD.png
-│
-├── source_data/                 # CSV input files
-│   ├── DosageForm.csv
-│   ├── DrugClass.csv
-│   ├── Generic.csv
-│   ├── Indication.csv
-│   ├── Manufacturer.csv
-│   └── Medicine.csv
-│
-├── scripts/                     # SQL ETL scripts
-│   ├── 00_CreateDatabase.sql
-│   ├── 01_DrugClass_ETL.sql
-│   ├── 02_DosageForm_ETL.sql
-│   ├── 03_Manufacturer_ETL.sql
-│   ├── 04_Indication_ETL.sql
-│   ├── 05_Generic_ETL.sql
-│   ├── 06_Medicine_ETL.sql
-│   ├── 07_Medicine_PackageSize_ETL.sql
-│   ├── 07b_Medicine_PackageContainer_ETL.sql
-│   └── 08_Generic_Indication_ETL.sql
-│
-├── tests/                       # Validation and sanity check queries
-│   └── 09_Validation.sql
-│
-└── README.md
-```
----
-
-## 🏗️ Database Schema
-
-The schema includes the following tables:
-
-| Table Name                  | Description |
-|-----------------------------|-------------|
-| Drug_Class                  | Drug classes with unique names |
-| Dosage_Form                 | Medicine dosage forms |
-| Manufacturer                | Pharmaceutical manufacturers |
-| Indication                  | Medical indications/conditions |
-| Generic                     | Generic drugs linked to drug classes |
-| Medicine                    | Brand medicines linked to generics, manufacturers, and dosage forms |
-| Medicine_PackageSize        | Pack size options per medicine (e.g. 30's pack, 100's pack) with pack price |
-| Medicine_PackageContainer   | Container size options per medicine (e.g. 100 ml bottle, 3 ml cartridge) with unit price and derived container type category |
-| Generic_Indication          | Junction table linking generics to indications (many-to-many) |
-
-For a visual representation, see the ERD diagram below:
-
-![Pharma ERD](docs/Pharma_ERD.png)
-
----
-
-## 🔄 ETL Workflow
-
-1. **Create Database**  
-   Run `00_CreateDatabase.sql` to create the `PharmaMarketAnalytics` database if it does not exist.
-
-2. **Load Tables**  
-   Execute the ETL scripts in order:
-   1. `01_DrugClass_ETL.sql`
-   2. `02_DosageForm_ETL.sql`
-   3. `03_Manufacturer_ETL.sql`
-   4. `04_Indication_ETL.sql`
-   5. `05_Generic_ETL.sql`
-   6. `06_Medicine_ETL.sql`
-   7. `07_Medicine_PackageSize_ETL.sql`
-   8. `07b_Medicine_PackageContainer_ETL.sql`
-   9. `08_Generic_Indication_ETL.sql`
-
-3. **Validate**  
-   Run `tests/09_Validation.sql` to verify row counts, check for duplicates, confirm referential integrity, and review summary statistics.
-
-Each ETL script follows this pattern:
-
-- 🗃️ Drop existing staging/final table if exists
-- 📥 Create staging table to match CSV format
-- 🔄 Bulk insert from CSV
-- 🧹 Clean data using T-SQL (trim, replace, deduplicate)
-- 🏷️ Insert into final table with foreign key mapping
-- 🗑️ Drop staging table
-- ✅ Verify row count
-
-### 💊 Medicine ETL — Scripts 06, 07, 07b
-
-The Medicine pipeline is split across three scripts due to the complexity of the source data. `Medicine.csv` stores package and pricing information in two raw columns — `Package_Container` and `Package_Size` — each containing multiple formats and embedded currency characters that require multi-step parsing.
-
-**`06_Medicine_ETL.sql`** loads the core Medicine table, extracts unit prices, and cleans the raw container strings in preparation for the two child table scripts.
-
-**`07_Medicine_PackageSize_ETL.sql`** parses the `Package_Size` column into the `Medicine_PackageSize` child table, storing each pack size option (e.g. 30's pack, 100's pack) with its price as a separate row. On completion, it drops the `Package_Size` column from Medicine.
-
-**`07b_Medicine_PackageContainer_ETL.sql`** parses the cleaned `Package_Container` column into the `Medicine_PackageContainer` child table, storing each container size option (e.g. 100 ml bottle, 3 ml cartridge) with its unit price as a separate row. Format B medicines — those sold by unit price only with no physical container description — are also captured here with `Container_Size = NULL`. After all rows are inserted, the script corrects known Container_Size typos (misspellings of liter, bottle, pre-filled, and the µg symbol) and derives a `Container_Type` category column using LIKE pattern matching (e.g. Bottle, Vial, Tube, Ampoule, Inhaler, Pre-filled Syringe). On completion, it drops the `Package_Container` and `Unit_Price` columns from Medicine.
-
-## 💡 Notes
-
-- **Generic_Indication** is populated from the `indication` column in `Generic.csv`, which maps each generic drug to its primary medical indication. 1,608 Generic–Indication pairs were loaded successfully.
-
-- **Known data quality issues** carried forward from the source CSV into the database. These are documented in the validation script and flagged for the Data Cleaning project:
-  - **59 true duplicate Medicine rows** — same Brand_Name, Strength, Dosage_Form, and Manufacturer — caused by CSV parsing artifacts in the source file. They survive the `DISTINCT` clause due to subtle field differences.
-  - **214 medicines with no Generic match** and **147 with no Manufacturer match** — caused by name mismatches between `Medicine.csv` and the reference CSVs.
-  - **1 Medicine_PackageSize duplicate group** (Unisaline Fruity) and **3 Medicine_PackageContainer duplicate groups** (Cholera Fluid, Glucose Saline, Normal Saline) — all caused by the upstream Medicine duplicates above.
-
-- CSV files in `source_data/` follow PascalCase naming to match the SQL scripts.
-
-- Scripts are fully repeatable and safe to run multiple times due to `DROP IF EXISTS` checks and deduplication logic.
-
-## 📂⚡ File Path Configuration (Important)
-
-This project uses `BULK INSERT` to load CSV files from the `source_data/` folder.
-
-⚠️ **SQL Server requires an absolute file path when using `BULK INSERT`.**
-
-After cloning the repository, you must update the file path inside each ETL script so it matches the location of the project on your local machine.
-
-### 🔎 Example
-
-If the repository is cloned to:
-```
-E:\Data Analysis\My Projects\PharmaMarket_ETL\
+|-- docs/
+|   `-- Pharma_ERD.png
+|-- source_data/
+|   |-- Dosage_Form.csv
+|   |-- Drug_Class.csv
+|   |-- Generic.csv
+|   |-- Indication.csv
+|   |-- Manufacturer.csv
+|   `-- Medicine.csv
+|-- scripts/
+|   |-- 00_CreateDatabase.sql
+|   |-- 00_ResetSchema.sql
+|   |-- 01_DrugClass_ETL.sql
+|   |-- 02_DosageForm_ETL.sql
+|   |-- 03_Manufacturer_ETL.sql
+|   |-- 04_Indication_ETL.sql
+|   |-- 05_Generic_ETL.sql
+|   |-- 06_Medicine_ETL.sql
+|   |-- 07_Medicine_PackageSize_ETL.sql
+|   |-- 07b_Medicine_PackageContainer_ETL.sql
+|   `-- 08_Generic_Indication_ETL.sql
+|-- tests/
+|   |-- 09_Validation.sql
+|   |-- 10_ValidationGate.sql
+|   `-- test_etl_contract.py
+|-- run_full_etl.sql
+|-- run_validation.sql
+|-- LICENSE.txt
+`-- README.md
 ```
 
-Then the `BULK INSERT` statement inside the ETL scripts should reference:
+## Database schema
 
-```sql
-FROM 'E:\Data Analysis\My Projects\PharmaMarket_ETL\source_data\'
+| Table | Purpose |
+|---|---|
+| `Drug_Class` | Unique drug classes |
+| `Dosage_Form` | Medicine dosage forms |
+| `Manufacturer` | Pharmaceutical manufacturers |
+| `Indication` | Medical indications and conditions |
+| `Generic` | Generic drugs linked to drug classes |
+| `Medicine` | Brand medicines linked to generics, manufacturers and dosage forms |
+| `Medicine_PackageSize` | Pack-size options and pack prices for each medicine |
+| `Medicine_PackageContainer` | Container options, unit prices and derived container categories |
+| `Generic_Indication` | Generics linked to the primary indication supplied in `Generic.csv` |
+
+![PharmaMarket database ERD](docs/Pharma_ERD.png)
+
+## Verified ETL output
+
+The complete rebuild was run twice against the disposable `PharmaMarketAnalytics_ETL_Test` database on 18 September 2026. Both runs completed successfully, which confirms that the reset and rebuild workflow is repeatable.
+
+| Table | Loaded rows |
+|---|---:|
+| `Drug_Class` | 1,599 |
+| `Dosage_Form` | 113 |
+| `Manufacturer` | 240 |
+| `Indication` | 2,043 |
+| `Generic` | 1,711 |
+| `Medicine` | 21,708 |
+| `Medicine_PackageSize` | 14,349 |
+| `Medicine_PackageContainer` | 22,707 |
+| `Generic_Indication` | 1,608 |
+
+The original `Medicine.csv` contains 21,714 rows. The ETL removes six exact duplicates with `SELECT DISTINCT`, leaving 21,708 records in `Medicine`.
+
+## Run the complete ETL in SSMS
+
+1. Open `run_full_etl.sql` in SQL Server Management Studio.
+2. Enable **Query > SQLCMD Mode**.
+3. Review the variables at the top of the file. The committed target is the disposable `PharmaMarketAnalytics_ETL_Test` database.
+4. Check the absolute paths used by the `:r` commands and the `BULK INSERT` statements.
+5. Execute the runner.
+
+SQLCMD Mode is required because the runner uses variables, included scripts and `:on error exit`. The runner creates the target database when needed, resets the ETL schema, runs scripts 01 through 08 in dependency order and finishes with both validation scripts.
+
+The schema reset only runs when `AllowDestructiveReset` is explicitly set to `YES`. Keep the disposable test database as the default while you test changes. Do not point the full runner at a database whose contents you need to preserve.
+
+To validate an existing build without changing it, open `run_validation.sql`, enable SQLCMD Mode and execute the file.
+
+### Manual execution order
+
+If you do not use the runner, execute the files in this order:
+
+1. `scripts/00_CreateDatabase.sql`
+2. `scripts/00_ResetSchema.sql`, with `AllowDestructiveReset=YES` only for an intentional rebuild
+3. `scripts/01_DrugClass_ETL.sql`
+4. `scripts/02_DosageForm_ETL.sql`
+5. `scripts/03_Manufacturer_ETL.sql`
+6. `scripts/04_Indication_ETL.sql`
+7. `scripts/05_Generic_ETL.sql`
+8. `scripts/06_Medicine_ETL.sql`
+9. `scripts/07_Medicine_PackageSize_ETL.sql`
+10. `scripts/07b_Medicine_PackageContainer_ETL.sql`
+11. `scripts/08_Generic_Indication_ETL.sql`
+12. `tests/09_Validation.sql`
+13. `tests/10_ValidationGate.sql`
+
+Do not rerun a parent-table script against a populated schema. Downstream foreign keys can block its table drop. Use the controlled full rebuild instead.
+
+## ETL design and transaction safety
+
+The reference-table scripts load source data into staging tables, normalize text, remove exact duplicates and map foreign keys before inserting the final rows. The Medicine pipeline needs extra parsing because `Medicine.csv` stores several package formats and embedded prices in two text fields.
+
+`06_Medicine_ETL.sql` loads the core medicine records and prepares the raw package values. `07_Medicine_PackageSize_ETL.sql` turns pack-size choices into child rows. `07b_Medicine_PackageContainer_ETL.sql` extracts container choices, unit prices and a derived container category. After the child tables are built, the temporary package columns are removed from `Medicine`.
+
+Every data-changing ETL script uses `SET XACT_ABORT ON` and a `TRY/CATCH` transaction. SQL Server rolls back the current script when a load or transformation fails, so a failed step does not leave a partially populated table.
+
+## Validation
+
+The project uses three validation layers.
+
+### Informational SQL validation
+
+`tests/09_Validation.sql` reports row counts, duplicate groups, null mappings, referential-integrity results and data distributions. These queries help you inspect the build without stopping it for known source-data issues.
+
+### Blocking SQL validation
+
+`tests/10_ValidationGate.sql` raises an error when a core expectation fails. It checks the verified source-snapshot row counts, unique keys, foreign keys and required fields. The full runner stops if this gate fails.
+
+### Offline contract tests
+
+The Python tests inspect the SQL files without connecting to SQL Server. They verify script order, transaction guards, destructive-reset protection, source-file contracts and the package parser limits present in the current data.
+
+Run them from the repository root:
+
+```powershell
+python -m unittest discover -s tests -p "test_*.py" -v
 ```
-### ⚠️ Important Notes
 
-- The path must be accessible by the SQL Server instance.
-- If SQL Server runs locally, the file must exist on your machine.
-- If SQL Server runs remotely or in Docker, the file must exist on that server or container.
-- Spaces in folder names are fully supported as long as the path is enclosed in single quotes.
-- Each ETL script contains a clearly marked section indicating where to update the file path.
+## Data-quality findings retained for cleaning
 
-### 💡 Why Absolute Paths?
+The ETL keeps uncertain records instead of making unsafe corrections. The separate cleaning project handles the deeper review.
 
-- `BULK INSERT` does **not** read files relative to the SQL script location.
-- It reads files relative to the SQL Server service environment.
-- For clarity and transparency, this project uses **documented absolute paths** instead of dynamic configuration.
+- `Medicine` contains 59 duplicate groups under the validation business key of brand, strength, dosage form and manufacturer. Differences outside that key mean they are not safe to delete automatically.
+- 214 medicines do not map to a generic. This group includes combination and herbal products as well as naming differences.
+- 147 medicines do not map to a manufacturer. The ETL leaves those foreign keys null rather than guessing a match.
+- Validation reports one duplicate group in `Medicine_PackageSize` and three in `Medicine_PackageContainer`. They remain available for review in the cleaning stage.
+- `Generic_Indication` reflects the single primary indication supplied for each source generic. The table structure supports repeated indications across many generics, but the source does not provide a rich bidirectional many-to-many relationship.
 
-## 🛠️ Technologies Used
+## File-path configuration
 
-- **SQL Server / T-SQL**
-- **BULK INSERT** with `FORMAT = 'CSV'` and `FIELDQUOTE` for robust CSV parsing
-- **CTEs** for data cleaning and deduplication
-- **Window functions** for block-level parsing of multi-value package strings
-- **Primary Keys, Foreign Keys, Unique Constraints** for data integrity
+SQL Server requires absolute paths for `BULK INSERT`. The committed scripts currently point to:
 
-## 🚀 Upcoming Projects
-This ETL pipeline is the foundation for a series of follow-up projects using the PharmaMarketAnalytics database:
+```text
+E:\Data Analysis\My Projects\PharmaMarket Data Platform\PharmaMarket_ETL\source_data
+```
 
-- 🧹 [**Data Cleaning**](https://github.com/GabrielaY0rdanova/PharmaMarket_Cleaning) — Deeper data quality work: resolving the 59 duplicate Medicine rows, standardizing drug names and dosage formats, validating foreign key relationships, and ensuring consistency across the dataset.
-- 🔍 [**Exploratory Data Analysis (EDA)**](https://github.com/GabrielaY0rdanova/PharmaMarket_EDA) — Uncovering patterns in drug classes, generics, manufacturers, and indications through analytical SQL queries and summary statistics.
-- 📊 **Data Visualization** — An interactive dashboard presenting key insights from the database, including drug distribution, manufacturer market share, and indication trends.
+After cloning or moving the repository, update the `BULK INSERT` path in scripts 01 through 06 and 08. Also update the absolute quoted `:r` paths in `run_full_etl.sql` and `run_validation.sql`.
 
-## 📚 Data Source
+The SQL Server service account must be able to read the source directory. If SQL Server runs on another machine or in a container, the files must be available in that environment. Spaces in the path work when the path is quoted correctly.
 
-The source CSV files were obtained from the Kaggle dataset:
+## Technologies
 
-[Assorted Medicine Dataset of Bangladesh](https://www.kaggle.com/datasets/ahmedshahriarsakib/assorted-medicine-dataset-of-bangladesh)
+- SQL Server and T-SQL
+- SQL Server Management Studio with SQLCMD Mode
+- `BULK INSERT` for source loading
+- CTEs and window functions for transformation and multi-value parsing
+- Primary keys, foreign keys and unique constraints for integrity
+- Python standard-library tests for offline SQL contract checks
 
-This dataset is used for educational purposes and to demonstrate ETL workflows.
+## Related projects
 
-## 👩‍💻 About Me
+- [PharmaMarket Cleaning](https://github.com/GabrielaY0rdanova/PharmaMarket_Cleaning) continues the data-quality work in SQL Server Management Studio.
+- [PharmaMarket EDA](https://github.com/GabrielaY0rdanova/PharmaMarket_EDA) moves the cleaned data to PostgreSQL and uses VS Code for exploratory analysis.
+- [PharmaMarket Visualization](https://github.com/GabrielaY0rdanova/PharmaMarket_Visualization) presents the final findings in an interactive dashboard.
 
-Hi! I'm [Gabriela Yordanova](https://www.linkedin.com/in/gabriela-yordanova-837ba2124/). Check out my full portfolio 🗂️ [here](https://gabrielay0rdanova.github.io/).
- 
-My background in pharmacy gives me genuine domain expertise in pharmaceutical data — 
-I know what the data means, not just what it looks like. This project is where it all 
-starts: raw CSVs transformed into a clean, structured relational database ready for analysis.
+## Data source
 
-*This project is part of my portfolio showcasing data engineering and ETL skills.*
+The source files come from the Kaggle dataset [Assorted Medicine Dataset of Bangladesh](https://www.kaggle.com/datasets/ahmedshahriarsakib/assorted-medicine-dataset-of-bangladesh). This project uses the data for education and portfolio demonstration.
 
-## 🛡️ License
+## About me
 
-This project is licensed under the [MIT License](LICENSE) and is available for educational and portfolio purposes.
+I'm [Gabriela Yordanova](https://www.linkedin.com/in/gabriela-yordanova-837ba2124/). My pharmacy background helps me interpret the pharmaceutical data, not only transform its structure. You can see the complete project context in [my portfolio](https://gabrielay0rdanova.github.io/).
+
+## License
+
+This project is available for educational and portfolio use under the [MIT License](LICENSE.txt).

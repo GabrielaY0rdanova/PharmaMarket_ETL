@@ -5,8 +5,13 @@
 -- and inserts into the final Dosage_Form table
 -- =================================================
 
-USE PharmaMarketAnalytics;
+USE [$(DatabaseName)];
 GO
+
+SET XACT_ABORT ON;
+
+BEGIN TRY
+    BEGIN TRANSACTION;
 
 -- ==========================
 -- DROP final table if exists
@@ -45,12 +50,12 @@ CREATE TABLE Staging_Dosage_Form (
 -- of the cloned repository on your local machine.
 --
 -- Example root folder:
--- E:\Data Analysis\My Projects\PharmaMarket_ETL\
+-- E:\Data Analysis\My Projects\PharmaMarket Data Platform\PharmaMarket_ETL\
 --
 -- SQL Server must have access to this location.
 -- ==========================
 BULK INSERT Staging_Dosage_Form
-FROM 'E:\Data Analysis\My Projects\PharmaMarket_ETL\source_data\Dosage_Form.csv'
+FROM 'E:\Data Analysis\My Projects\PharmaMarket Data Platform\PharmaMarket_ETL\source_data\Dosage_Form.csv'
 WITH (
     FIRSTROW = 2,
     FIELDTERMINATOR = ',',
@@ -92,3 +97,10 @@ DROP TABLE Staging_Dosage_Form;
 -- VERIFY
 -- ==========================
 SELECT COUNT(*) AS Dosage_Form_Count FROM Dosage_Form;
+
+    COMMIT TRANSACTION;
+END TRY
+BEGIN CATCH
+    IF XACT_STATE() <> 0 ROLLBACK TRANSACTION;
+    THROW;
+END CATCH;

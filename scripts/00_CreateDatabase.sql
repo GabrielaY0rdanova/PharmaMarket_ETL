@@ -1,27 +1,39 @@
 -- =================================================
 -- 00_CreateDatabase.sql
--- Script to create the PharmaMarketAnalytics database
+-- Creates the SQLCMD-configured target database.
 -- Creates the database if it does not exist and sets the context
 -- =================================================
 
 -- ==========================
 -- CREATE DATABASE IF NOT EXISTS
 -- ==========================
-IF NOT EXISTS (SELECT name FROM sys.databases WHERE name = 'PharmaMarketAnalytics')
+DECLARE @DatabaseName SYSNAME = N'$(DatabaseName)';
+DECLARE @QuotedDatabaseName NVARCHAR(258);
+DECLARE @CreateDatabaseSql NVARCHAR(MAX);
+
+IF @DatabaseName = N'' OR @DatabaseName LIKE N'$%'
 BEGIN
-    CREATE DATABASE PharmaMarketAnalytics;
-    PRINT 'Database PharmaMarketAnalytics created successfully.';
+    THROW 51000, 'DatabaseName SQLCMD variable is not configured.', 1;
+END;
+
+SET @QuotedDatabaseName = QUOTENAME(@DatabaseName);
+
+IF DB_ID(@DatabaseName) IS NULL
+BEGIN
+    SET @CreateDatabaseSql = N'CREATE DATABASE ' + @QuotedDatabaseName + N';';
+    EXEC sys.sp_executesql @CreateDatabaseSql;
+    PRINT N'Database ' + @QuotedDatabaseName + N' created successfully.';
 END
 ELSE
 BEGIN
-    PRINT 'Database PharmaMarketAnalytics already exists.';
+    PRINT N'Database ' + @QuotedDatabaseName + N' already exists.';
 END
 GO
 
 -- ==========================
 -- SET CONTEXT TO DATABASE
 -- ==========================
-USE PharmaMarketAnalytics;
+USE [$(DatabaseName)];
 GO
 
 -- ==========================

@@ -16,8 +16,13 @@
 -- On completion, Package_Size column is dropped from Medicine.
 -- =================================================
 
-USE PharmaMarketAnalytics;
+USE [$(DatabaseName)];
 GO
+
+SET XACT_ABORT ON;
+
+BEGIN TRY
+    BEGIN TRANSACTION;
 
 -- ==========================
 -- DROP child table if exists
@@ -355,3 +360,10 @@ SELECT
     SUM(CASE WHEN Pack_Price IS NULL THEN 1 ELSE 0 END)        AS Null_Pack_Price,
     COUNT(DISTINCT Brand_ID)                                    AS Distinct_Medicines
 FROM Medicine_PackageSize;
+
+    COMMIT TRANSACTION;
+END TRY
+BEGIN CATCH
+    IF XACT_STATE() <> 0 ROLLBACK TRANSACTION;
+    THROW;
+END CATCH;
