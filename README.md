@@ -65,7 +65,7 @@ PharmaMarket_ETL/
 
 ## Verified ETL output
 
-The complete rebuild was run twice against the disposable `PharmaMarketAnalytics_ETL_Test` database on 18 September 2026. Both runs completed successfully, which confirms that the reset and rebuild workflow is repeatable.
+The complete rebuild was run twice against the project database on 18 September 2026. Both runs completed successfully, which confirms that the reset and rebuild workflow is repeatable. The verified database is now named `PharmaMarketAnalytics_ETL`.
 
 | Table | Loaded rows |
 |---|---:|
@@ -85,13 +85,13 @@ The original `Medicine.csv` contains 21,714 rows. The ETL removes six exact dupl
 
 1. Open `run_full_etl.sql` in SQL Server Management Studio.
 2. Enable **Query > SQLCMD Mode**.
-3. Review the variables at the top of the file. The committed target is the disposable `PharmaMarketAnalytics_ETL_Test` database.
+3. Review the variables at the top of the file. The committed target is the dedicated `PharmaMarketAnalytics_ETL` project database.
 4. Check the absolute paths used by the `:r` commands and the `BULK INSERT` statements.
 5. Execute the runner.
 
 SQLCMD Mode is required because the runner uses variables, included scripts and `:on error exit`. The runner creates the target database when needed, resets the ETL schema, runs scripts 01 through 08 in dependency order and finishes with both validation scripts.
 
-The schema reset only runs when `AllowDestructiveReset` is explicitly set to `YES`. Keep the disposable test database as the default while you test changes. Do not point the full runner at a database whose contents you need to preserve.
+The schema reset only runs when `AllowDestructiveReset` is explicitly set to `YES`. The ETL database is designed to be rebuilt from the committed source snapshot. Do not point the full runner at another database whose contents you need to preserve.
 
 To validate an existing build without changing it, open `run_validation.sql`, enable SQLCMD Mode and execute the file.
 

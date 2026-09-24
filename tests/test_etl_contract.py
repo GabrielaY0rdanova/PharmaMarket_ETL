@@ -125,10 +125,10 @@ class EtlContractTests(unittest.TestCase):
         self.assertIn("EXEC sys.sp_executesql @CreateDatabaseSql", sql)
         self.assertNotIn("EXEC(N'CREATE DATABASE '", sql)
 
-    def test_full_runner_targets_the_test_database_and_includes_all_steps(self):
+    def test_full_runner_targets_the_etl_database_and_includes_all_steps(self):
         runner = (PROJECT_ROOT / "run_full_etl.sql").read_text(encoding="utf-8-sig")
         self.assertIn(
-            ':setvar DatabaseName "PharmaMarketAnalytics_ETL_Test"', runner
+            ':setvar DatabaseName "PharmaMarketAnalytics_ETL"', runner
         )
 
         expected_includes = (
@@ -150,12 +150,12 @@ class EtlContractTests(unittest.TestCase):
             self.assertNotIn("$(ProjectRoot)", line)
             self.assertTrue(line.startswith(':r "E:\\'), line)
 
-    def test_validation_runner_targets_the_test_database(self):
+    def test_validation_runner_targets_the_etl_database(self):
         runner = (PROJECT_ROOT / "run_validation.sql").read_text(
             encoding="utf-8-sig"
         )
         self.assertIn(
-            ':setvar DatabaseName "PharmaMarketAnalytics_ETL_Test"', runner
+            ':setvar DatabaseName "PharmaMarketAnalytics_ETL"', runner
         )
         self.assertEqual(runner.count("09_Validation.sql"), 1)
         self.assertEqual(runner.count("10_ValidationGate.sql"), 1)

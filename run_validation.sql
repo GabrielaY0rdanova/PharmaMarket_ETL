@@ -4,7 +4,7 @@
 -- Open in SSMS with SQLCMD Mode enabled.
 -- =================================================
 
-:setvar DatabaseName "PharmaMarketAnalytics_ETL_Test"
+:setvar DatabaseName "PharmaMarketAnalytics_ETL"
 :on error exit
 
 PRINT 'Validating database: $(DatabaseName)';

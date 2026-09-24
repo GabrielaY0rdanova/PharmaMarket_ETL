@@ -6,7 +6,7 @@
 -- only when you intentionally want to use another database or project path.
 -- =================================================
 
-:setvar DatabaseName "PharmaMarketAnalytics_ETL_Test"
+:setvar DatabaseName "PharmaMarketAnalytics_ETL"
 :setvar AllowDestructiveReset "YES"
 :on error exit
 
